@@ -1,0 +1,17 @@
+/.metadata/
+webRepo/.metadata/
+**/.settings/
+**/bin/
+*.project
+*.classpath
+setup/
+miniTemp/
+htmlRepo/media/
+cssRepo/media/
+*.jar
+log.txt
+**/resources/img/
+**/Servers/
+*.MF
+webRepo/**/.gitignore
+webRepo/webPrjsemi/src/main/webapp/static/img/
