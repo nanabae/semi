@@ -24,6 +24,44 @@ public class MemberDao {
 				return result;
 			}
 
+	public MemberVo login(Connection conn, MemberVo vo) throws Exception {
+		//SQL
+				String sql = "SELECT * FROM MEMBER WHERE MEM_ID = ? AND MEM_PWD = ? AND MEM_STATUS = 'O'";
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, vo.getId());
+				pstmt.setString(2, vo.getPwd());
+				ResultSet rs = pstmt.executeQuery();
+				
+				//tx || rs 
+				MemberVo loginMember = null;
+				if(rs.next()) {
+					String no = rs.getString("MEM_NUM");
+					String id = rs.getString("MEM_ID");
+					String pwd = rs.getString("MEM_PWD");
+					String nick = rs.getString("MEM_NICK");
+					String birth = rs.getString("MEM_BIRTH");
+					String phon = rs.getString("MEM_PHON");
+					int point = rs.getInt("MEM_POINT");
+					String status = rs.getString("MEM_STATUS");
+					
+					loginMember = new MemberVo();
+					loginMember.setMemNum(no);
+					loginMember.setId(id);
+					loginMember.setPwd(pwd);
+					loginMember.setNick(nick);
+					loginMember.setBirth(birth);
+					loginMember.setPhon(phon);
+					loginMember.setPoint(point);
+					loginMember.setStatus(status);
+				}
+	
+
+				JDBCTemplate.close(rs);
+				JDBCTemplate.close(pstmt);
+				
+				return loginMember;
+	}
+
 
 
 }
