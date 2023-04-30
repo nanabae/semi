@@ -27,7 +27,7 @@ public class DramaListController extends HttpServlet {
 			
 			//데이터 준비
 			String catNum = req.getParameter("catNum");
-			
+			System.out.println(catNum);
 			int listCount = ds.selectCnt(catNum);
 			String page = req.getParameter("page");
 			if(page == null) page = "1";
@@ -38,7 +38,7 @@ public class DramaListController extends HttpServlet {
 			
 			//서비스
 			List<DramaVo> list = null;
-			if(catNum == null || catNum.equals("")) {
+			if(catNum == null || catNum.equals("") || catNum.equals("0")) {
 				list = ds.selectDramaList(pv);
 			}else {
 				list = ds.selectDramaList(pv,catNum);
