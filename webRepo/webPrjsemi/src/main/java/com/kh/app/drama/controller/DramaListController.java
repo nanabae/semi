@@ -18,8 +18,7 @@ import com.kh.app.drama.vo.DramaVo;
 public class DramaListController extends HttpServlet {
 	private final DramaService ds = new DramaService();
 	
-	//공지사항 목록
-	// SQL ~~~
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

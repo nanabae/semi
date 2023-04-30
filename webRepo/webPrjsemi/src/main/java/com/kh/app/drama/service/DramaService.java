@@ -44,7 +44,7 @@ public class DramaService {
 		return list;
 	}
 
-	//공지사항 상세조회(select+update)
+	//상세조회(select+update)
 	public DramaVo selectDramaOneByNum(String dramaNum) throws Exception {
 		DramaVo vo = null;
 		//conn
@@ -61,6 +61,29 @@ public class DramaService {
 			}
 		}
 		return vo;
+	}
+
+	public int getDramaListCnt(String searchType, String searchValue) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int cnt = dao.selectCnt(conn,searchType, searchValue);
+		
+		JDBCTemplate.close(conn);
+		
+		return cnt;
+	}
+	
+	//검색 조회
+	public List<DramaVo> selectDramaList(PageVo pv, String searchType, String searchValue) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<DramaVo> list = dao.selectDramaList(conn , pv , searchType, searchValue);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
 	}
 
 

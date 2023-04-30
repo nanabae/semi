@@ -60,6 +60,20 @@
 				</tbody>
 
 			</table>    
+			<div id="search-area">
+            	<form action="${root}/drama/search" method="get">
+            		<input type="hidden" name="page" value="1">
+            		<input type="hidden" name="catNum" value="0">
+            		<select name="searchType">
+						<option value="all">전체</option>
+            			<option value="title">제목</option>
+            			<option value="writer">작성자</option>
+            			<option value="content">내용</option>
+            		</select>
+            		<input type="text" name="searchValue" value="${searchVo.searchValue}">
+            		<input type="submit" value="검색">
+            	</form>
+            </div>
 			
 			<div id="page-area">
 				<%@ include file="/WEB-INF/views/common/page-area.jsp"%>
@@ -81,5 +95,22 @@
 			location.href = "${root}/drama/detail?dramaNum=" + dramaNum;
 		});
 	}
+
+	const searchType = '${searchVo.searchType}';
+	const searchValue = '${searchVo.searchValue}';
+	
+	const searchValueInputTag = document.querySelector("input[name='searchValue']");
+	
+	if(searchType.length > 1){
+		initSearchType();
+	}
+	
+	// 검색 타입 초기셋팅
+	function initSearchType(){
+		const x = document.querySelector('select > option[value="' + searchType + '"]');
+		x.selected = true;
+	}
+
+
 </script>
 
