@@ -11,7 +11,12 @@
 <link rel="stylesheet" href="${root}/static/css/common/reset.css">
 <link rel="stylesheet" href="${root}/static/css/common/header.css">
 
-
+<c:if test="${ not empty alertMsg }">
+	<script>
+	    alert('${alertMsg}');
+	</script>
+</c:if>
+<c:remove var="alertMsg" scope="session"/>
 
 <header>
 	<div></div>

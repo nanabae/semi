@@ -50,7 +50,7 @@ public class MemberJoinController extends HttpServlet{
 			//화면
 			if(result == 1) {
 				String root = req.getContextPath();
-				req.getSession().setAttribute("alertMsg", "회원가입 성공!");
+				req.getSession().setAttribute("alertMsg", "회원가입을 축하드립니다!");
 				resp.sendRedirect(root + "/home");
 			}else {
 				throw new Exception("[ERROR] MemberJoinController.doPost...");
