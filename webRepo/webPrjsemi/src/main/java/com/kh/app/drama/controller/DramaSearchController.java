@@ -30,6 +30,7 @@ public class DramaSearchController extends HttpServlet{
 			int cnt = bs.getDramaListCnt(searchType , searchValue);
 			int page = Integer.valueOf(req.getParameter("page"));
 			PageVo pv = new PageVo(cnt, page, 10, 20);
+			System.out.println(cnt);
 			
 			//서비스
 			List<DramaVo> voList = null;
@@ -47,6 +48,8 @@ public class DramaSearchController extends HttpServlet{
 			req.setAttribute("searchVo", map);
 			req.setAttribute("pv", pv);
 			req.setAttribute("list", voList);
+			System.out.println(pv);
+			System.out.println(voList);
 			req.getRequestDispatcher("/WEB-INF/views/drama/list.jsp").forward(req, resp);
 			
 			

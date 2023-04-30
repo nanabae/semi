@@ -26,7 +26,6 @@ public class DramaListController extends HttpServlet {
 			
 			//데이터 준비
 			String catNum = req.getParameter("catNum");
-			System.out.println(catNum);
 			int listCount = ds.selectCnt(catNum);
 			String page = req.getParameter("page");
 			if(page == null) page = "1";
@@ -42,8 +41,7 @@ public class DramaListController extends HttpServlet {
 			}else {
 				list = ds.selectDramaList(pv,catNum);
 			}
-			System.out.println(pv);
-			System.out.println(list);
+
 			//화면
 			req.setAttribute("pv" , pv);
 			req.setAttribute("list", list);

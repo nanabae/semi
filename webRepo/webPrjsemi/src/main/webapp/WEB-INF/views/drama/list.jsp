@@ -63,7 +63,7 @@
 			<div id="search-area">
             	<form action="${root}/drama/search" method="get">
             		<input type="hidden" name="page" value="1">
-            		<input type="hidden" name="catNum" value="0">
+            		<!-- <input type="hidden" name="catNum" value="0"> -->
             		<select name="searchType">
 						<option value="all">전체</option>
             			<option value="title">제목</option>
