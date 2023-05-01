@@ -10,6 +10,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="${root}/static/css/common/reset.css">
 <link rel="stylesheet" href="${root}/static/css/common/header.css">
+<link rel="stylesheet" href="${root}/static/css/common/nav.css">   
 
 <c:if test="${ not empty alertMsg }">
 	<script>
