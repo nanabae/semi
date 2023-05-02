@@ -42,7 +42,10 @@
 
         <%@ include file="/WEB-INF/views/common/header.jsp" %>
         <main>
-            <%@ include file="/WEB-INF/views/common/nav.jsp" %>
+			<nav>
+			<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+			</nav>
+			
 
             <div id="drama-area">
                 <div>${ vo.catName }</div>

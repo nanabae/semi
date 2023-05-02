@@ -23,7 +23,7 @@
 	<div></div>
 	<nav>
 		<ul>
-			<li><a href="${root}/drama/list?page=1&catNum=0">드라마방</a></li>
+			<li><a href="${root}/drama/list?page=1&catNum=">드라마방</a></li>
 			<li><a href="${root}/board/list?page=1">수다방</a></li>
 			<li><a href="${root}/notice/list">공지</a></li>
 			<c:if test="${!empty loginMember}">

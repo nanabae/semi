@@ -17,13 +17,13 @@ public class DramaDao {
 		//SQL	
 		        String sql = "SELECT COUNT(*)  FROM DRAMA_BOARD WHERE STATUS = 'O'";
 
-		        if("1".equals(catNum) || "2".equals(catNum) || "3".equals(catNum)  )  {
+		        if("10".equals(catNum) || "20".equals(catNum) || "30".equals(catNum)  )  {
 		        	sql += " AND CAT_NUM = ?";
 				}
 				
 
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				if("1".equals(catNum) || "2".equals(catNum) || "3".equals(catNum) ){
+				if("10".equals(catNum) || "20".equals(catNum) || "30".equals(catNum) ){
 					pstmt.setString(1, catNum);
 				}
 				

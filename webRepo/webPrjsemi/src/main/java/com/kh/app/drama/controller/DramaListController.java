@@ -36,12 +36,12 @@ public class DramaListController extends HttpServlet {
 			
 			//서비스
 			List<DramaVo> list = null;
-			if(catNum == null || catNum.equals("") || catNum.equals("0")) {
+			if(catNum == null || catNum.equals("")) {
+		
 				list = ds.selectDramaList(pv);
 			}else {
 				list = ds.selectDramaList(pv,catNum);
 			}
-
 			//화면
 			req.setAttribute("pv" , pv);
 			req.setAttribute("list", list);
