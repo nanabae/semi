@@ -95,7 +95,7 @@
         </main>
        
             <%@ include file="/WEB-INF/views/common/footer.jsp"%>
-       
+	  
     </div>
 </body>
 </html>
@@ -124,24 +124,11 @@
 		x.selected = true;
 	}
 	
-	if(searchValue.length > 1){
-		searchValueInputTag.value = ${searchVo.searchValue};
-	}
-	//서치타입 변경 시 함수 실행
-	const searchTypeTag = document.querySelector('select[name="searchType"]');
-	searchTypeTag.addEventListener("change" , initSearchValueSelect);
-
-	
-	//검색한 이후에 검색값이 유지되게
-	function initSearchValueSelect(){
-		searchValueInputTag.value = "";
-		//searchValueInputTag.value = ${searchVo.searchValue};
-	}
-	
-	//initSearchValueSelect();
-	
-	
-
+	//서치타입 변경 시 함수 실행+검색 값 비우기
+		 const searchTypeTag = document.querySelector('select[name="searchType"]');
+		 searchTypeTag.addEventListener("change" , function(){
+			searchValueInputTag.value = '';
+		 });
 
 </script>
 
