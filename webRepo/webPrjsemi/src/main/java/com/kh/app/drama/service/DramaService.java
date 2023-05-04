@@ -11,33 +11,20 @@ import com.kh.app.drama.vo.DramaVo;
 public class DramaService {
 	private final DramaDao dao = new DramaDao();
 	
-	public int selectCnt(String catNum) throws Exception {
-		//conn
+	public int getDramaListCnt(String catNum, String searchType, String searchValue) throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int cnt = dao.selectCnt(conn,catNum);
+		int cnt = dao.getDramaListCnt(conn,catNum,searchType, searchValue);
 		
 		JDBCTemplate.close(conn);
 		
 		return cnt;
 	}
-	
-	public List<DramaVo> selectDramaList(PageVo pv) throws Exception {
-		Connection conn = JDBCTemplate.getConnection();
-		
-		List<DramaVo> list = dao.selectDramaList(conn , pv);
-		
-		JDBCTemplate.close(conn);
-		
-		return list;
-		
-	}
 
-	public List<DramaVo> selectDramaList(PageVo pv, String catNum) throws Exception {
-		//conn
+	public List<DramaVo> selectDramaList(PageVo pv, String catNum, String searchType, String searchValue) throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		List<DramaVo> list = dao.selectDramaList(conn , pv , catNum);
+		List<DramaVo> list = dao.selectDramaList(conn , pv , catNum, searchType, searchValue);
 		
 		JDBCTemplate.close(conn);
 		
@@ -63,30 +50,7 @@ public class DramaService {
 		return vo;
 	}
 
-	public int getDramaListCnt(String searchType, String searchValue) throws Exception {
-		//conn
-		Connection conn = JDBCTemplate.getConnection();
-		
-		int cnt = dao.selectCnt(conn,searchType, searchValue);
-		
-		JDBCTemplate.close(conn);
-		
-		return cnt;
-	}
-	
-	//검색 조회
-	public List<DramaVo> selectDramaList(PageVo pv, String searchType, String searchValue) throws Exception {
-		//conn
-		Connection conn = JDBCTemplate.getConnection();
-		
-		List<DramaVo> list = dao.selectDramaList(conn , pv , searchType, searchValue);
-		
-		JDBCTemplate.close(conn);
-		
-		return list;
-	}
 
 
-	
-}	
+}
 	

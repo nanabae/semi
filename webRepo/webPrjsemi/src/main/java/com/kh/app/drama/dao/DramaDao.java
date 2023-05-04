@@ -12,51 +12,68 @@ import com.kh.app.common.page.PageVo;
 import com.kh.app.drama.vo.DramaVo;
 
 public class DramaDao {
+	
+	public int getDramaListCnt(Connection conn, String catNum, String searchType, String searchValue) throws Exception {
+		String sql = "SELECT COUNT(*)  FROM DRAMA_BOARD D JOIN MEMBER M ON (D.DRAMA_WRITER = M.MEM_NUM)  JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) WHERE STATUS = 'O' AND C.CAT_NUM LIKE '%" + catNum + "%'";
+		
+		if ("all".equals(searchType)) {
+			sql += " AND  TITLE LIKE '%" + searchValue + "%' OR MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%'";
+	        }
 
-	public int selectCnt(Connection conn, String catNum) throws Exception {
-		//SQL	
-		        String sql = "SELECT COUNT(*)  FROM DRAMA_BOARD WHERE STATUS = 'O'";
+	    else if ("title".equals(searchType)) {
+		    sql += " AND TITLE LIKE '%" + searchValue + "%'";
+		} else if ("writer".equals(searchType)) {
+		    sql += " AND MEM_NICK LIKE '%" + searchValue + "%'";
+		} else if ("content".equals(searchType)) {
+		    sql += " AND CONTENT LIKE '%" + searchValue + "%'";
+		}
 
-		        if("10".equals(catNum) || "20".equals(catNum) || "30".equals(catNum)  )  {
-		        	sql += " AND CAT_NUM = ?";
-				}
-				
-
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				if("10".equals(catNum) || "20".equals(catNum) || "30".equals(catNum) ){
-					pstmt.setString(1, catNum);
-				}
-				
-				ResultSet rs = pstmt.executeQuery();
-				
-				//tx || rs
-				int cnt = 0;
-				if(rs.next()) {
-					cnt = rs.getInt(1);
-				}
-				
-				//close
-				JDBCTemplate.close(rs);
-				JDBCTemplate.close(pstmt);
-				
-				return cnt;
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		//tx || rs
+		int cnt = 0;
+		if(rs.next()) {
+			cnt = rs.getInt(1);
+		}
+		
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+		
+		return cnt;
 	}
-	//일반 조회
-	public List<DramaVo> selectDramaList(Connection conn, PageVo pv) throws Exception {
-		//SQL
-		String sql = "SELECT * FROM ( SELECT ROWNUM RNUM, T.* FROM ( SELECT D.DRAMA_BRD_NUM, D.DRAMA_WRITER, M.MEM_NICK, D.CAT_NUM, C.CAT_NAME , TITLE , D.CONTENT, D.STATUS, TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE, D.MODIFY_DATE, D.HIT, D.ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) WHERE STATUS = 'O' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
+
+	public List<DramaVo> selectDramaList(Connection conn, PageVo pv, String catNum, String searchType,
+			String searchValue) throws Exception {
+		
+		String sql ="SELECT * FROM ( SELECT ROWNUM RNUM , T.* FROM ( SELECT D.DRAMA_BRD_NUM , D.CAT_NUM ,D.TITLE , D.CONTENT , D.DRAMA_WRITER ,  D.ENROLL_DATE , D.STATUS , D.MODIFY_DATE , D.HIT ,D.ANONYMITY, M.MEM_NICK ,C.CAT_NAME FROM DRAMA_BOARD D JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) WHERE D.STATUS = 'O'  AND C.CAT_NUM LIKE '%" + catNum + "%' ";
+
+		if ("all".equals(searchType)) {
+		    sql += " AND (D.TITLE LIKE '%" + searchValue + "%' OR M.MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%' )ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?"; //()중요
+		} else if ("title".equals(searchType)) {
+		    sql += "AND D.TITLE LIKE '%" + searchValue + "%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
+		} else if ("writer".equals(searchType)) {
+		    sql += " AND M.MEM_NICK LIKE '%" + searchValue + "%'  ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
+		} else if ("content".equals(searchType)) {
+		    sql += " AND D.CONTENT LIKE '%" + searchValue + "%'  ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
+		}else {
+			
+			sql += "ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
+		}
+		
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setInt(1, pv.getBeginRow());
 		pstmt.setInt(2, pv.getLastRow());
 		ResultSet rs = pstmt.executeQuery();
 		
-		//tx || rs
 		List<DramaVo> list = new ArrayList<>();
+		
 		while(rs.next()) {
 			String dramaNum = rs.getString("DRAMA_BRD_NUM");
 			String dramaWriter = rs.getString("DRAMA_WRITER");
-			String catNum = rs.getString("CAT_NUM");
+			//String CatNum = rs.getString("CAT_NUM");
 			String title = rs.getString("TITLE");
 			String content = rs.getString("CONTENT");
 			String status = rs.getString("STATUS");
@@ -64,8 +81,8 @@ public class DramaDao {
 			String modifyDate = rs.getString("MODIFY_DATE");
 			int hit = rs.getInt("HIT");
 			String anonymity = rs.getString("ANONYMITY");
-			String catName = rs.getString("CAT_NAME");
 			String writerName = rs.getString("MEM_NICK");
+			String catName= rs.getString("CAT_NAME");
 			
 			DramaVo vo = new DramaVo();
 			vo.setDramaNum(dramaNum);
@@ -78,8 +95,8 @@ public class DramaDao {
 			vo.setModifyDate(modifyDate);
 			vo.setHit(hit);
 			vo.setAnonymity(anonymity);
-			vo.setCatName(catName);
 			vo.setWriterName(writerName);
+			vo.setCatName(catName);
 			
 			list.add(vo);
 		}
@@ -89,57 +106,6 @@ public class DramaDao {
 		JDBCTemplate.close(pstmt);
 		
 		return list;
-	}
-
-	//카테고리로 조회
-	public List<DramaVo> selectDramaList(Connection conn, PageVo pv, String catNum2) throws Exception {
-		//SQL
-				String sql = "SELECT * FROM ( SELECT ROWNUM RNUM, T.* FROM ( SELECT D.DRAMA_BRD_NUM, D.DRAMA_WRITER, M.MEM_NICK, D.CAT_NUM, C.CAT_NAME , TITLE , D.CONTENT, D.STATUS, TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE, D.MODIFY_DATE, D.HIT, D.ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) WHERE STATUS = 'O' AND D.CAT_NUM = ? ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-				
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, catNum2);
-				pstmt.setInt(2, pv.getBeginRow());
-				pstmt.setInt(3, pv.getLastRow());
-				ResultSet rs = pstmt.executeQuery();
-				
-				//tx || rs
-				List<DramaVo> list = new ArrayList<>();
-				while(rs.next()) {
-					String dramaNum = rs.getString("DRAMA_BRD_NUM");
-					String dramaWriter = rs.getString("DRAMA_WRITER");
-					String catNum = rs.getString("CAT_NUM");
-					String title = rs.getString("TITLE");
-					String content = rs.getString("CONTENT");
-					String status = rs.getString("STATUS");
-					String enrollDate = rs.getString("ENROLL_DATE");					
-					String modifyDate = rs.getString("MODIFY_DATE");
-					int hit = rs.getInt("HIT");
-					String anonymity = rs.getString("ANONYMITY");
-					String catName = rs.getString("CAT_NAME");
-					String writerName = rs.getString("MEM_NICK");
-					
-					DramaVo vo = new DramaVo();
-					vo.setDramaNum(dramaNum);
-					vo.setDramaWriter(dramaWriter);
-					vo.setCatNum(catNum2);
-					vo.setTitle(title);
-					vo.setContent(content);
-					vo.setStatus(status);
-					vo.setEnrollDate(enrollDate);
-					vo.setModifyDate(modifyDate);
-					vo.setHit(hit);
-					vo.setAnonymity(anonymity);
-					vo.setCatName(catName);
-					vo.setWriterName(writerName);
-					
-					list.add(vo);
-				}
-				
-				//close
-				JDBCTemplate.close(rs);
-				JDBCTemplate.close(pstmt);
-				
-				return list;
 	}
 
 	public int increaseHit(Connection conn, String dramaNum) throws Exception {
@@ -198,104 +164,6 @@ public class DramaDao {
 				return vo;
 	}
 
-	public int selectCnt(Connection conn, String searchType, String searchValue) throws Exception {
-		String sql = "SELECT COUNT(*)  FROM DRAMA_BOARD D JOIN MEMBER M ON (D.DRAMA_WRITER = M.MEM_NUM)  WHERE STATUS = 'O'";
-
-		if ("all".equals(searchType)) {
-		    sql += " AND TITLE LIKE '%" + searchValue + "%' OR MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%'";
-		} else if ("title".equals(searchType)) {
-		    sql += " AND TITLE LIKE '%" + searchValue + "%'";
-		} else if ("writer".equals(searchType)) {
-		    sql += " AND MEM_NICK LIKE '%" + searchValue + "%'";
-		} else if ("content".equals(searchType)) {
-		    sql += " AND CONTENT LIKE '%" + searchValue + "%'";
-		}
-		
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		ResultSet rs = pstmt.executeQuery();
-		
-		//tx || rs
-		int cnt = 0;
-		if(rs.next()) {
-			cnt = rs.getInt(1);
-		}
-		
-		JDBCTemplate.close(rs);
-		JDBCTemplate.close(pstmt);
-		
-		return cnt;
-
-	}
-	//검색
-	public List<DramaVo> selectDramaList(Connection conn, PageVo pv, String searchType, String searchValue) throws Exception {
-//		String sql ="SELECT * FROM ( SELECT ROWNUM RNUM, T.* FROM ( SELECT D.DRAMA_BRD_NUM, D.DRAMA_WRITER, M.MEM_NICK, D.CAT_NUM, C.CAT_NAME , TITLE , D.CONTENT, D.STATUS, TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE, D.MODIFY_DATE, D.HIT, D.ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) WHERE STATUS = 'O' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		String sql ="";
-
-		if ("all".equals(searchType)) {
-		    sql = "SELECT * FROM ( SELECT ROWNUM RNUM , T.* FROM ( SELECT D.DRAMA_BRD_NUM , D.CAT_NUM ,D.TITLE , D.CONTENT , D.DRAMA_WRITER ,  D.ENROLL_DATE , D.STATUS , D.MODIFY_DATE , D.HIT ,D.ANONYMITY, M.MEM_NICK ,C.CAT_NAME FROM DRAMA_BOARD D JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) WHERE D.STATUS = 'O' AND D.TITLE LIKE '%'||?||'%' OR M.MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		} else if ("title".equals(searchType)) {
-		    sql = "SELECT * FROM ( SELECT ROWNUM RNUM , T.* FROM ( SELECT D.DRAMA_BRD_NUM ,D.CAT_NUM , D.TITLE , D.CONTENT , D.DRAMA_WRITER ,  D.ENROLL_DATE , D.STATUS , D.MODIFY_DATE , D.HIT ,D.ANONYMITY, M.MEM_NICK , C.CAT_NAME FROM DRAMA_BOARD D JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) WHERE D.STATUS = 'O' AND D.TITLE LIKE '%'||?||'%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		} else if ("writer".equals(searchType)) {
-		    sql += " SELECT * FROM ( SELECT ROWNUM RNUM , T.* FROM ( SELECT D.DRAMA_BRD_NUM , D.CAT_NUM ,D.TITLE , D.CONTENT , D.DRAMA_WRITER ,  D.ENROLL_DATE , D.STATUS , D.MODIFY_DATE , D.HIT ,D.ANONYMITY, M.MEM_NICK , C.CAT_NAME FROM DRAMA_BOARD D JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM)  WHERE D.STATUS = 'O' AND M.MEM_NICK LIKE '%'||?||'%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		} else if ("content".equals(searchType)) {
-		    sql = " SELECT * FROM ( SELECT ROWNUM RNUM , T.* FROM ( SELECT D.DRAMA_BRD_NUM , D.CAT_NUM ,D.TITLE , D.CONTENT , D.DRAMA_WRITER ,  D.ENROLL_DATE , D.STATUS , D.MODIFY_DATE , D.HIT ,D.ANONYMITY, M.MEM_NICK , C.CAT_NAME FROM DRAMA_BOARD D JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM)  WHERE D.STATUS = 'O' AND D.CONTENT LIKE '%'||?||'%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		}
-		
-		//		if ("all".equals(searchType)) {
-//		    sql += " AND TITLE LIKE '%" + searchValue + "%' OR MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%'";
-//		} else if ("title".equals(searchType)) {
-//		    sql += " AND TITLE LIKE '%" + searchValue + "%'";
-//		} else if ("writer".equals(searchType)) {
-//		    sql += " AND MEM_NICK LIKE '%" + searchValue + "%'";
-//		} else if ("content".equals(searchType)) {
-//		    sql += " AND CONTENT LIKE '%" + searchValue + "%'";
-//		}
-//		
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString	(1, searchValue);
-		pstmt.setInt(2, pv.getBeginRow());
-		pstmt.setInt(3, pv.getLastRow());
-		ResultSet rs = pstmt.executeQuery();
-		
-		List<DramaVo> list = new ArrayList<>();
-		
-		while(rs.next()) {
-			String dramaNum = rs.getString("DRAMA_BRD_NUM");
-			String dramaWriter = rs.getString("DRAMA_WRITER");
-			String catNum = rs.getString("CAT_NUM");
-			String title = rs.getString("TITLE");
-			String content = rs.getString("CONTENT");
-			String status = rs.getString("STATUS");
-			String enrollDate = rs.getString("ENROLL_DATE");					
-			String modifyDate = rs.getString("MODIFY_DATE");
-			int hit = rs.getInt("HIT");
-			String anonymity = rs.getString("ANONYMITY");
-			String writerName = rs.getString("MEM_NICK");
-			String catName= rs.getString("CAT_NAME");
-			
-			DramaVo vo = new DramaVo();
-			vo.setDramaNum(dramaNum);
-			vo.setDramaWriter(dramaWriter);
-			vo.setCatNum(catNum);
-			vo.setTitle(title);
-			vo.setContent(content);
-			vo.setStatus(status);
-			vo.setEnrollDate(enrollDate);
-			vo.setModifyDate(modifyDate);
-			vo.setHit(hit);
-			vo.setAnonymity(anonymity);
-			vo.setWriterName(writerName);
-			vo.setCatName(catName);
-			
-			list.add(vo);
-		}
-		
-		//close
-		JDBCTemplate.close(rs);
-		JDBCTemplate.close(pstmt);
-		
-		return list;
-	}
 
 
 }

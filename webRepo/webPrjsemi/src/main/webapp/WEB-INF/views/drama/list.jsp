@@ -12,6 +12,15 @@
         margin: auto;
         font-size: 24px;
     }
+	thead{
+		height: 5%;
+	}
+	tbody{
+		height: 95%;
+	}
+	tbody>tr>td{
+		height: 5%;
+	}
 
     main table th , 
     main table td {
@@ -64,15 +73,16 @@
 
 			</table>    
 			<div id="search-area">
-            	<form action="${root}/drama/search" method="get">
+            	<form action="${root}/drama/list" method="get">
             		<input type="hidden" name="page" value="1">
+            		<input type="hidden" name="catNum" value="${catNum}">
                     	<select name="searchType">
 						<option value="all">전체</option>
             			<option value="title">제목</option>
             			<option value="writer">작성자</option>
             			<option value="content">내용</option>
             		</select>
-            		<input type="text" name="searchValue" value="${param.searchValue}">
+            		<input type="text" name="searchValue" value="${searchVo.searchValue}">
             		<input type="submit" value="검색">
             	</form>
             </div>
@@ -114,6 +124,9 @@
 		x.selected = true;
 	}
 	
+	if(searchValue.length > 1){
+		searchValueInputTag.value = ${searchVo.searchValue};
+	}
 	//서치타입 변경 시 함수 실행
 	const searchTypeTag = document.querySelector('select[name="searchType"]');
 	searchTypeTag.addEventListener("change" , initSearchValueSelect);
@@ -121,10 +134,11 @@
 	
 	//검색한 이후에 검색값이 유지되게
 	function initSearchValueSelect(){
-		searchValueInputTag.value = ${searchVo.searchValue};
+		searchValueInputTag.value = "";
+		//searchValueInputTag.value = ${searchVo.searchValue};
 	}
 	
-	initSearchValueSelect();
+	//initSearchValueSelect();
 	
 	
 

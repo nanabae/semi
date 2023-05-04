@@ -1,7 +1,9 @@
  package com.kh.app.drama.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +27,14 @@ public class DramaListController extends HttpServlet {
 		try {
 			
 			//데이터 준비
-			String catNum = req.getParameter("catNum");
-			int listCount = ds.selectCnt(catNum);
+			String catNum = ""; //catNum이 널일 경우 listCount가 0
+			String catNum_ = req.getParameter("catNum");
+			String searchType = req.getParameter("searchType");
+			String searchValue = req.getParameter("searchValue");
+			
+			if(catNum_ != null) catNum = catNum_ ;			
+
+			int listCount = ds.getDramaListCnt(catNum,searchType,searchValue);
 			String page = req.getParameter("page");
 			if(page == null) page = "1";
 			int currentPage = Integer.valueOf(page);
@@ -36,13 +44,16 @@ public class DramaListController extends HttpServlet {
 			
 			//서비스
 			List<DramaVo> list = null;
-			if(catNum == null || catNum.equals("")) {
-		
-				list = ds.selectDramaList(pv);
-			}else {
-				list = ds.selectDramaList(pv,catNum);
-			}
+			list = ds.selectDramaList(pv,catNum,searchType,searchValue);
+
+			Map<String, String> map = new HashMap<>();
+			map.put("searchType", searchType);
+			map.put("searchValue", searchValue);
+			
+			System.out.println(pv);
 			//화면
+			req.setAttribute("catNum", catNum);
+			req.setAttribute("searchVo", map);
 			req.setAttribute("pv" , pv);
 			req.setAttribute("list", list);
 			req.getRequestDispatcher("/WEB-INF/views/drama/list.jsp").forward(req, resp);
@@ -52,7 +63,7 @@ public class DramaListController extends HttpServlet {
 			System.out.println("[ERROR] drama list errrr....");
 			e.printStackTrace();
 			
-			req.setAttribute("errorMsg", "드라마 목록 조회 실패 ...");
+			req.setAttribute("errorMsg", "드라마 목록 조회,검색 실패 ...");
 			req.getRequestDispatcher("/WEB-INF/views/common/error-page.jsp").forward(req, resp);
 		}
 	}
