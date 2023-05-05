@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 <style>
     main table {
         width: 800px;
@@ -30,6 +31,42 @@
 	.td3:hover {
 		cursor: pointer;
 	}	
+	td>a{
+		text-decoration: none;
+	}
+
+	#modal-wrap{
+	    width: 100vw;
+	    height: 100vh;
+	    background-color: rgba(211, 211, 211, 0.702);
+	    position: fixed;
+	    top: 0px;
+	    left: 0px;
+	    display: none;
+	    justify-content: center;
+	    align-items: center;
+	}
+	
+	#modal-wrap.active{
+	    display: flex;
+	}
+	
+	#modal{
+	    width: 30vw;
+	    height: 70vh;
+	    border: 5px solid black;
+	    box-sizing: border-box;
+	}
+
+	.modal-body{
+		width: 200px;
+	    height: 300px;
+	    border: 1px solid black;
+	    box-sizing: border-box;
+
+		margin: auto;
+		
+	}
 </style>
 
 </head>
@@ -63,7 +100,32 @@
 							<td class="td1">${ drama.dramaNum }</td>
 							<td>${ drama.catName }</td>
 							<td class="td3">${ drama.title }</td>
-							<td>${ drama.writerName }</td>
+							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>
+							<c:if test="${!empty loginMember }">
+								<td><a href="javascript:toggleModal('${ drama.writerName }','${ drama.dramaWriter }')">${ drama.writerName }</a>
+							    <div id="modal-wrap">
+									<div id="modal">
+										<button onclick="toggleModal();">창닫기</button>
+										<div class="modal-body">
+											<p><strong>닉네임:</strong>  <span class="writer-name"></span></p>
+											<p><strong>포인트:</strong> </p>
+											<form action="${root}/memo/write" method="post">
+												<input type="hidden" class="drama-writer" name="dramaWriter">
+												<input type="hidden" class="writer-name" name="writerName" >
+																						
+												<p><strong>회원 메모:</strong> </p>
+												<input type="text" name="memoContent">
+												<input type="submit" value="등록">
+											</form>
+
+										</div>
+										<button>쪽지보내기</button>
+									</div>
+
+								</div>
+								</td>
+							</c:if>
+							
 							<td>${ drama.enrollDate }</td>
 							<td>${ drama.hit }</td>
 						</tr>
@@ -79,6 +141,7 @@
                     	<select name="searchType">
 						<option value="all">전체</option>
             			<option value="title">제목</option>
+						
             			<option value="writer">작성자</option>
             			<option value="content">내용</option>
             		</select>
@@ -102,6 +165,8 @@
 <script>
 	const td3Arr = document.querySelectorAll('.td3');
 	const td1Arr = document.querySelectorAll('.td1');
+
+	//상세 조회
 	for(i= 0 ; i < td3Arr.length ; i++){
 		td3Arr[i].addEventListener('click', function(e) {
 			const dramaNum = e.target.parentNode.children[0].innerText;

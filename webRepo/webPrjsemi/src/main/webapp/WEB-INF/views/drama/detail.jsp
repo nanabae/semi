@@ -15,7 +15,7 @@
 
         display: grid;
         grid-template-columns: 100px 1fr 100px;
-        grid-template-rows: 50px 30px 1fr;
+        grid-template-rows: 50px 30px 30px 1fr;
         align-items: center;
     }
 
@@ -28,8 +28,12 @@
     #drama-area > div:nth-child(4) {
 		grid-column: span 2;
 	}
-
     #drama-area > div:nth-child(6) {
+		grid-column: span 3;
+       
+	}
+
+    #drama-area > div:nth-child(7) {
 		grid-column: span 3;
        
 	}
@@ -53,7 +57,8 @@
                 <div>${ vo.writerName }</div>
                 <div>${ vo.enrollDate }</div>     
                 
-                <div>${ vo.hit }</div>             
+                <div>${ vo.hit }</div>  
+                <div id="memo-area">메모</div>           
                 <div>${ vo.content }</div>
             </div>
 
@@ -94,3 +99,9 @@
 
 </body>
 </html>
+
+<script>
+    #memo-area{
+        
+    }
+</script>
