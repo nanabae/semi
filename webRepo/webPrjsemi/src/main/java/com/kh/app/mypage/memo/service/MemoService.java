@@ -52,6 +52,23 @@ public class MemoService {
 
 		return result;
 	}
+
+	public int deleteMemo(String memoNum) throws Exception {
+		int result ;
+		try(Connection conn = JDBCTemplate.getConnection();){
+			result = dao.deleteMemo(conn, memoNum);
+			
+			//tx || rs
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}
+
+		return result;
+	}
+
 	
 	
 	

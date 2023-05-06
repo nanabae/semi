@@ -69,4 +69,16 @@ public class MemoDao {
 
 	}
 
+	public int deleteMemo(Connection conn, String memoNum) throws Exception {
+		String sql = "DELETE MEMO WHERE MEMO_NUM=?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, memoNum);
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
+
 }

@@ -48,7 +48,7 @@
 
     .active{display: block;}
 
-    #modal-wrap{
+    .modal-wrap{
 	    width: 200px;
 	    height: 50px;
 	    background-color: rgba(211, 211, 211, 0.702);
@@ -60,7 +60,7 @@
 	    align-items: center;
 	}
 	
-	#modal-wrap.active{
+	.modal-edit.active , .modal-delete.active{
 	    display: flex;
 	}
 	
@@ -99,7 +99,7 @@
                         <li class="memo-area memo-text"></li>
                         <input type="hidden" class="memo-num">
                         <li class="memo-area"><button class="modify-button" onclick="editModal();" >수정하기</button></li>
-                        <div id="modal-wrap">
+                        <div class="modal-wrap modal-edit">
                             
                                 <div class="modal-body">
                                     <form action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
@@ -112,7 +112,19 @@
                                 </div>
                             
                         </div>
-                        <li class="memo-area"><button class="delete-button" >삭제하기</button></li>
+                        <li class="memo-area"><button class="delete-button" onclick="deleteModal();">삭제하기</button></li>
+                        <div class="modal-wrap modal-delete">
+                            
+                            <div class="modal-body">
+                                <form action="${root}/memo/delete" method="post" onsubmit="return confirmDelMemo()">
+                                    <input type="hidden" class="memo-num" name="memoNum"> 
+                                    <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+                                    <input type="submit" value="삭제">
+                                </form>
+
+                            </div>
+                        
+                    </div>
                     </ul>    
                     
                 </div>      
@@ -192,10 +204,18 @@ function loadMemo(dramaNum) {
 
 function editModal(){
     	//모달 가져오기
-		const mw = document.querySelector("#modal-wrap");
+		const me = document.querySelector(".modal-edit");
 	   
        //active 클래스        
-       mw.classList.add("active");
+       me.classList.add("active");
+}
+
+function deleteModal(){
+    	//모달 가져오기
+		const md = document.querySelector(".modal-delete");
+	   
+       //active 클래스        
+       md.classList.add("active");
 }
 
 
@@ -206,6 +226,17 @@ function validMemo(){
     return false;
   }
   return true;
+}
+
+function confirmDelMemo(){
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        return true;
+  
+    } else {
+        location.href = "${root}/drama/detail?dramaNum=${vo.dramaNum}";
+        return false;
+}
+
 }
 
 </script>  
