@@ -22,23 +22,24 @@ public class DramaSearchController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+			String catNum = req.getParameter("catNum");
 			String searchType = req.getParameter("searchType");
 			String searchValue = req.getParameter("searchValue");
 			
 			DramaService bs = new DramaService();
 			
-			int cnt = bs.getDramaListCnt(searchType , searchValue);
+			int cnt = bs.getDramaListCnt(catNum,searchType , searchValue);
 			int page = Integer.valueOf(req.getParameter("page"));
 			PageVo pv = new PageVo(cnt, page, 10, 20);
 			System.out.println(cnt);
 			
 			//서비스
 			List<DramaVo> voList = null;
-			if(searchType == null || searchType.equals("") || searchValue == null || searchValue.equals("")) {
-				voList = bs.selectDramaList(pv);
-			}else {
-				 voList = bs.selectDramaList(pv,searchType , searchValue);
-			}
+//			if(searchType == null || searchType.equals("") || searchValue == null || searchValue.equals("")) {
+//				voList = bs.selectDramaList(pv, catNum, searchType, searchValue);
+//			}else {
+				 voList = bs.selectDramaList(pv, catNum, searchType, searchValue);
+//			}
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("searchType", searchType);
