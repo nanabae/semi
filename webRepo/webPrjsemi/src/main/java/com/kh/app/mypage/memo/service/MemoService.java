@@ -36,6 +36,22 @@ public class MemoService {
 		
 		return vo;
 	}
+
+	public int editMemo(MemoVo vo) throws Exception {
+		int result ;
+		try(Connection conn = JDBCTemplate.getConnection();){
+			result = dao.editMemo(conn, vo);
+			
+			//tx || rs
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}
+
+		return result;
+	}
 	
 	
 	

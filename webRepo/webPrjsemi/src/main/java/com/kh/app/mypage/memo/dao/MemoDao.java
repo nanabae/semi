@@ -56,4 +56,17 @@ public class MemoDao {
 
 	}
 
+	public int editMemo(Connection conn, MemoVo vo) throws Exception {
+		//SQL
+		String sql = "UPDATE MEMO SET MEMO_CONTENT = ? WHERE MEMO_NUM = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getMemoContent());
+		pstmt.setString(2, vo.getMemoNum());
+		
+		int result = pstmt.executeUpdate();
+		JDBCTemplate.close(pstmt);
+		return result;
+
+	}
+
 }

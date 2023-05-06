@@ -47,6 +47,33 @@
     }
 
     .active{display: block;}
+
+    #modal-wrap{
+	    width: 200px;
+	    height: 50px;
+	    background-color: rgba(211, 211, 211, 0.702);
+	    position: fixed;
+	    top: 0px;
+	    left: 0px;
+	    display: none;
+	    justify-content: center;
+	    align-items: center;
+	}
+	
+	#modal-wrap.active{
+	    display: flex;
+	}
+	
+	.modal-body{
+		width: 70px;
+	    height: 30px;
+	    border: 1px solid black;
+	    box-sizing: border-box;
+
+		margin: auto;
+		
+	}
+
 </style>
 </head>
 <body>
@@ -68,8 +95,23 @@
                 <div>${ vo.hit }</div> 
                 <div>
                     <ul>
+                    <ul>
                         <li class="memo-area memo-text"></li>
-                        <li class="memo-area"><button class="modify-button" >수정하기</button></li>
+                        <input type="hidden" class="memo-num">
+                        <li class="memo-area"><button class="modify-button" onclick="editModal();" >수정하기</button></li>
+                        <div id="modal-wrap">
+                            
+                                <div class="modal-body">
+                                    <form action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
+                                        <input type="hidden" class="memo-num" name="memoNum"> 
+                                        <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+                                        <input type="text" name="memoContent" >
+                                        <input type="submit" value="수정">
+                                    </form>
+
+                                </div>
+                            
+                        </div>
                         <li class="memo-area"><button class="delete-button" >삭제하기</button></li>
                     </ul>    
                     
@@ -108,8 +150,6 @@
     
         </main>
 
-
-
         <%@ include file="/WEB-INF/views/common/footer.jsp"%>
     </div>    
 
@@ -122,27 +162,50 @@ if("${loginMember}" != null && "${loginMember}" !=""){
 
 const memoText = document.querySelector(".memo-text");
 const memoAreaArr = document.querySelectorAll(".memo-area");
-let memoContent;
+const memoNumArr = document.querySelectorAll(".memo-num");
+
 function loadMemo(dramaNum) {
     $.ajax({
         url: "/app/memo/search",
         type: "post",
         data: { dramaNum: dramaNum },
         success: function(data) {
-            const x = JSON.parse(data);
-            if(x != null && x != ""){
+             x = JSON.parse(data);
+             if(x != null && x != ""){
                 memoAreaArr.forEach((area) => {
                 area.classList.add("active");
             });
                 
                 memoText.innerHTML = x.memoContent;
-            }
+                memoNumArr.forEach((memoNumV) => {
+                    memoNumV.value = x.memoNum;
+            });
+                
+        }
 
         },
         error: function() {
             console.log();
         },
-    });
+    })
+}
+
+function editModal(){
+    	//모달 가져오기
+		const mw = document.querySelector("#modal-wrap");
+	   
+       //active 클래스        
+       mw.classList.add("active");
+}
+
+
+function validMemo(){
+    const memoContent = document.querySelector('input[name="memoContent"]').value;
+  if (memoContent === '') {
+    alert('수정할 내용을 입력해주세요.');
+    return false;
+  }
+  return true;
 }
 
 </script>  
