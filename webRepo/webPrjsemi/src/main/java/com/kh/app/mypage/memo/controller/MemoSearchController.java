@@ -26,17 +26,15 @@ public class MemoSearchController extends HttpServlet{
 		
 		try {
 			String dramaNum = req.getParameter("dramaNum");
-			System.out.println(dramaNum);
 			
 			MemberVo loginMember = (MemberVo) req.getSession().getAttribute("loginMember");
 			String memoWriter = loginMember.getMemNum();
 			
 			MemoVo vo = ms.selectMemoOneByno(memoWriter,dramaNum);
-			
+			req.getSession().setAttribute("memoVo", vo);
 			//자바객체를 JSON 형태의 문자열로 변환
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson(vo);
-			System.out.println(jsonStr);
 			//문자열 내보내기
 			resp.setCharacterEncoding("UTF-8");
 			PrintWriter out = resp.getWriter();

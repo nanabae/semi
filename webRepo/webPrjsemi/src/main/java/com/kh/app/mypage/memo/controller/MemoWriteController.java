@@ -21,6 +21,7 @@ public class MemoWriteController extends HttpServlet{
 		
 		try {
 			//데이터 꺼내오기 닉네임 필요한지? 나중에 삭제?
+			String dramaNum = req.getParameter("dramaNum");
 			String writerName = req.getParameter("writerName"); 
 			String dramaWriter = req.getParameter("dramaWriter");
 			String memoContent = req.getParameter("memoContent");
@@ -43,7 +44,7 @@ public class MemoWriteController extends HttpServlet{
 			
 			//화면
 			if(result == 1) {
-				resp.sendRedirect(req.getContextPath() + "/drama/list");
+				resp.sendRedirect(req.getContextPath() + "/drama/detail?dramaNum="+ dramaNum);
 			}else {
 				throw new Exception();
 			}

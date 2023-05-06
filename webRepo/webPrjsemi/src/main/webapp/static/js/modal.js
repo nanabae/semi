@@ -15,7 +15,7 @@
 		nickname.innerHTML = writerName;
 		dramaWriterInput.value= dramaWriter;
 		writerNameInput.value = writerName;
-		memoContentInput.value = "채울것";
+		// memoContentInput.value = ;
 
 	}
 	

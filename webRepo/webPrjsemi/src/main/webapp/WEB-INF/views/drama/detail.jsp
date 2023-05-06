@@ -74,6 +74,39 @@
 		
 	}
 
+    #modal-wrap{
+	    width: 100vw;
+	    height: 100vh;
+	    background-color: rgba(211, 211, 211, 0.702);
+	    position: fixed;
+	    top: 0px;
+	    left: 0px;
+	    display: none;
+	    justify-content: center;
+	    align-items: center;
+	}
+	
+	#modal-wrap.active{
+	    display: flex;
+	}
+	
+	#modal{
+	    width: 30vw;
+	    height: 70vh;
+	    border: 5px solid black;
+	    box-sizing: border-box;
+	}
+
+	#modal-body{
+		width: 200px;
+	    height: 300px;
+	    border: 1px solid black;
+	    box-sizing: border-box;
+
+		margin: auto;
+		
+	}
+
 </style>
 </head>
 <body>
@@ -89,7 +122,55 @@
             <div id="drama-area">
                 <div>${ vo.catName }</div>
                 <div>${ vo.title }</div>
-                <div>${ vo.writerName }</div>
+                <c:if test="${empty loginMember }"><div>${ vo.writerName }</div></c:if>
+                <c:if test="${!empty loginMember }">
+                <div><a href="javascript:toggleModal('${ vo.writerName }','${ vo.dramaWriter }')">${ vo.writerName }</a>
+                    <div id="modal-wrap">
+                        <div id="modal">
+                            <button onclick="toggleModal();">창닫기</button>
+                            <div id="modal-body">
+                                <p><strong>닉네임:</strong>  <span class="writer-name"></span></p>
+                                <p><strong>포인트:</strong> </p>
+                                
+                                <form  class="myForm" action="${root}/memo/write" method="post">
+                                    <input type="hidden" class="drama-writer" name="dramaWriter">
+                                    <input type="hidden" class="writer-name" name="writerName" >
+                                    <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }' >
+                                    <!--회원 메모가 존재하면 수정/삭제버튼 나오게/회원 메모가 없을 경우에만 등록버튼  필요-->
+                                    <p><strong>회원 메모:</strong> </p>
+                                    <c:if test="${empty memoVo}">
+                                        <input type="text" class="innerMemo"  name="memoContent"  value=>
+                                        <input type="submit" value="등록">
+                                    </c:if>
+
+                                 </form>
+                           
+                                    <c:if test="${!empty memoVo}">
+                                        
+                                        <form class="myForm" action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
+                                            <input type="hidden" class="memo-num" name="memoNum"> 
+                                            <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+                                            <input type="text"  id="editContent" class="innerMemo"  name="memoContent"  value=>
+                                            <input type="submit" value="수정">
+                                        </form>
+                                       
+                                        <form class="myForm" action="${root}/memo/delete" method="post" onsubmit="return confirmDelMemo()">
+                                            <input type="hidden" class="memo-num" name="memoNum"> 
+                                            <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+    
+                                            <input type="submit" value="삭제">
+                                        </form>
+                                  
+                                    </c:if>
+
+                            </div>
+                            <button>쪽지보내기</button>
+                        </div>
+
+                    </div>
+                </div>
+            </c:if>
+            
                 <div>${ vo.enrollDate }</div>     
                 
                 <div>${ vo.hit }</div> 
@@ -105,7 +186,7 @@
                                     <form action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
                                         <input type="hidden" class="memo-num" name="memoNum"> 
                                         <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
-                                        <input type="text" name="memoContent" >
+                                        <input type="text" id="editContent" name="memoContent" >
                                         <input type="submit" value="수정">
                                     </form>
 
@@ -170,12 +251,12 @@
 <script>
 if("${loginMember}" != null && "${loginMember}" !=""){
     loadMemo('${vo.dramaNum}');
-}
+  }
 
 const memoText = document.querySelector(".memo-text");
 const memoAreaArr = document.querySelectorAll(".memo-area");
 const memoNumArr = document.querySelectorAll(".memo-num");
-
+const innerMemoArr = document.querySelectorAll('.innerMemo');
 function loadMemo(dramaNum) {
     $.ajax({
         url: "/app/memo/search",
@@ -189,17 +270,33 @@ function loadMemo(dramaNum) {
             });
                 
                 memoText.innerHTML = x.memoContent;
+                innerMemoArr.forEach((innerMemo) => {
+                    innerMemo.value= x.memoContent;
+            });
+                // innerMemo.value= x.memoContent;
                 memoNumArr.forEach((memoNumV) => {
                     memoNumV.value = x.memoNum;
             });
                 
         }
-
+        return x;
         },
         error: function() {
             console.log();
         },
     })
+}
+
+const editDel = document.querySelector(".edit-delete");
+function updateDel(){
+    editDel.value="";
+}      
+
+const myFormArr = document.querySelectorAll('.myForm');
+for (i = 0; i < myFormArr.length; i++) {
+    myFormArr[i].addEventListener('submit', function(event) {
+        loadMemo('${vo.dramaNum}');
+  });
 }
 
 function editModal(){
@@ -220,12 +317,12 @@ function deleteModal(){
 
 
 function validMemo(){
-    const memoContent = document.querySelector('input[name="memoContent"]').value;
-  if (memoContent === '') {
-    alert('수정할 내용을 입력해주세요.');
-    return false;
-  }
-  return true;
+    const editContent = document.querySelector('#editContent');
+    if (editContent.value === '') {
+        alert('수정할 내용을 입력해주세요.');
+        return false;
+    }
+    return true;
 }
 
 function confirmDelMemo(){
