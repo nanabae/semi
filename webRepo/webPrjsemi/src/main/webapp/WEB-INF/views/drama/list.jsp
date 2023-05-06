@@ -78,7 +78,6 @@
 			<nav>
 			<%@ include file="/WEB-INF/views/common/nav.jsp" %>
 			</nav>
-			
 
     		<table>
 
@@ -112,9 +111,9 @@
 											<form action="${root}/memo/write" method="post">
 												<input type="hidden" class="drama-writer" name="dramaWriter">
 												<input type="hidden" class="writer-name" name="writerName" >
-																						
+												<!--회원 메모가 존재하면 수정/삭제버튼 나오게/회원 메모가 없을 경우에만 등록버튼  필요-->
 												<p><strong>회원 메모:</strong> </p>
-												<input type="text" name="memoContent">
+												<input type="text" name="memoContent" value='${ vo.memoContent }'>
 												<input type="submit" value="등록">
 											</form>
 
@@ -156,9 +155,7 @@
 			</div>
     
         </main>
-       
-            <%@ include file="/WEB-INF/views/common/footer.jsp"%>
-	  
+            <%@ include file="/WEB-INF/views/common/footer.jsp"%>	  
     </div>
 </body>
 </html>
@@ -167,12 +164,12 @@
 	const td1Arr = document.querySelectorAll('.td1');
 
 	//상세 조회
-	for(i= 0 ; i < td3Arr.length ; i++){
-		td3Arr[i].addEventListener('click', function(e) {
-			const dramaNum = e.target.parentNode.children[0].innerText;
-			location.href = "${root}/drama/detail?dramaNum=" + dramaNum;
-		});
-	}
+	for (i = 0; i < td3Arr.length; i++) {
+   td3Arr[i].addEventListener('click', async function(e) {
+    const dramaNum = e.target.parentNode.children[0].innerText;
+    location.href = "${root}/drama/detail?dramaNum=" + dramaNum;
+  });
+}
 
 	const searchType = '${searchVo.searchType}';
 	const searchValue = '${searchVo.searchValue}';

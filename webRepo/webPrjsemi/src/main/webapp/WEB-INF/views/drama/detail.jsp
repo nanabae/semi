@@ -37,19 +37,27 @@
 		grid-column: span 3;
        
 	}
+    #drama-area ul{
+        display: flex;
+        justify-content: left;
+        align-items: center;
+    }
+    .memo-area {
+        display: none;
+    }
 
-    
+    .active{display: block;}
 </style>
 </head>
 <body>
     <div id="wrap">
 
         <%@ include file="/WEB-INF/views/common/header.jsp" %>
+      
         <main>
 			<nav>
 			<%@ include file="/WEB-INF/views/common/nav.jsp" %>
 			</nav>
-			
 
             <div id="drama-area">
                 <div>${ vo.catName }</div>
@@ -57,13 +65,21 @@
                 <div>${ vo.writerName }</div>
                 <div>${ vo.enrollDate }</div>     
                 
-                <div>${ vo.hit }</div>  
-                <div id="memo-area">메모</div>           
+                <div>${ vo.hit }</div> 
+                <div>
+                    <ul>
+                        <li class="memo-area memo-text"></li>
+                        <li class="memo-area"><button class="modify-button" >수정하기</button></li>
+                        <li class="memo-area"><button class="delete-button" >삭제하기</button></li>
+                    </ul>    
+                    
+                </div>      
+             
                 <div>${ vo.content }</div>
             </div>
 
             <c:if test="${ !empty loginMember}">
-                <div id="notice-btn-area">
+                <div id="drama-btn-area">
                     <a  href="${root}/drama/edit?dramaNum=${vo.dramaNum}">수정하기</a>
                     <a  href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제하기</a>
                 </div>
@@ -99,9 +115,40 @@
 
 </body>
 </html>
-
 <script>
-    #memo-area{
-        
-    }
-</script>
+if("${loginMember}" != null && "${loginMember}" !=""){
+    loadMemo('${vo.dramaNum}');
+}
+
+const memoText = document.querySelector(".memo-text");
+const memoAreaArr = document.querySelectorAll(".memo-area");
+let memoContent;
+function loadMemo(dramaNum) {
+    $.ajax({
+        url: "/app/memo/search",
+        type: "post",
+        data: { dramaNum: dramaNum },
+        success: function(data) {
+            const x = JSON.parse(data);
+            if(x != null && x != ""){
+                memoAreaArr.forEach((area) => {
+                area.classList.add("active");
+            });
+                
+                memoText.innerHTML = x.memoContent;
+            }
+
+        },
+        error: function() {
+            console.log();
+        },
+    });
+}
+
+</script>  
+
+
+
+
+
+

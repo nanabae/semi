@@ -8,7 +8,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="${root}/static/js/modal.js"></script> 
 
-
 <title>Insert title here</title>
 <link rel="stylesheet" href="${root}/static/css/common/reset.css">
 <link rel="stylesheet" href="${root}/static/css/common/header.css">
@@ -40,3 +39,5 @@
 	</nav>
    
 </header>
+
+
