@@ -42,7 +42,7 @@
         justify-content: left;
         align-items: center;
     }
-    .memo-area {
+    .memo-area ,.btnWrite , .btnEdit {
         display: none;
     }
 
@@ -131,37 +131,31 @@
                             <div id="modal-body">
                                 <p><strong>닉네임:</strong>  <span class="writer-name"></span></p>
                                 <p><strong>포인트:</strong> </p>
-                                
-                                <form  class="myForm" action="${root}/memo/write" method="post">
+                                                          
+                                    <form  class="myForm" action="${root}/memo/write" method="post">
                                     <input type="hidden" class="drama-writer" name="dramaWriter">
                                     <input type="hidden" class="writer-name" name="writerName" >
                                     <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }' >
                                     <!--회원 메모가 존재하면 수정/삭제버튼 나오게/회원 메모가 없을 경우에만 등록버튼  필요-->
                                     <p><strong>회원 메모:</strong> </p>
-                                    <c:if test="${empty memoVo}">
-                                        <input type="text" class="innerMemo"  name="memoContent"  value=>
-                                        <input type="submit" value="등록">
-                                    </c:if>
+                                    
+                                        <input type="text" class="innerMemo btnWrite"  name="memoContent"  value=>
+                                        <input class="btnWrite" type="submit" value="등록">
+                                    </form>
 
-                                 </form>
-                           
-                                    <c:if test="${!empty memoVo}">
-                                        
-                                        <form class="myForm" action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
-                                            <input type="hidden" class="memo-num" name="memoNum"> 
-                                            <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
-                                            <input type="text"  id="editContent" class="innerMemo"  name="memoContent"  value=>
-                                            <input type="submit" value="수정">
-                                        </form>
-                                       
-                                        <form class="myForm" action="${root}/memo/delete" method="post" onsubmit="return confirmDelMemo()">
-                                            <input type="hidden" class="memo-num" name="memoNum"> 
-                                            <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
-    
-                                            <input type="submit" value="삭제">
-                                        </form>
-                                  
-                                    </c:if>
+                                    <form class="myForm" action="${root}/memo/edit" method="post" onsubmit="return validEditMemo()">
+                                        <input type="hidden" class="memo-num" name="memoNum" > 
+                                        <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+                                        <input type="text"  class="editContent innerMemo btnEdit"  name="memoContent">
+                                        <input class="btnEdit" type="submit" value="수정">
+                                    </form>
+                                    
+                                    <form class="myForm" action="${root}/memo/delete" method="post" onsubmit="return confirmDelMemo()">
+                                        <input type="hidden" class="memo-num" name="memoNum"> 
+                                        <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
+                                        <input class="btnEdit" type="submit" value="삭제">
+                                    </form>
+                               
 
                             </div>
                             <button>쪽지보내기</button>
@@ -183,10 +177,10 @@
                         <div class="modal-wrap modal-edit">
                             
                                 <div class="modal-body">
-                                    <form action="${root}/memo/edit" method="post" onsubmit="return validMemo()">
+                                    <form action="${root}/memo/edit" method="post" onsubmit="return validEditMemo()">
                                         <input type="hidden" class="memo-num" name="memoNum"> 
                                         <input type="hidden"  name="dramaNum" value='${ vo.dramaNum }'> 
-                                        <input type="text" id="editContent" name="memoContent" >
+                                        <input type="text" class="editContent" name="memoContent" >
                                         <input type="submit" value="수정">
                                     </form>
 
@@ -249,14 +243,20 @@
 </body>
 </html>
 <script>
-if("${loginMember}" != null && "${loginMember}" !=""){
-    loadMemo('${vo.dramaNum}');
-  }
-
 const memoText = document.querySelector(".memo-text");
 const memoAreaArr = document.querySelectorAll(".memo-area");
 const memoNumArr = document.querySelectorAll(".memo-num");
 const innerMemoArr = document.querySelectorAll('.innerMemo');
+const btnWriteArr = document.querySelectorAll(".btnWrite");
+const btnEditArr= document.querySelectorAll(".btnEdit");
+
+// 드디어 해결. 읽어오는 속도때문에 문제였다. 코드에는 문제가 없었는데 
+if("${loginMember}" != null && "${loginMember}" !=""){
+    loadMemo('${vo.dramaNum}');
+    setTimeout(showBtn,500)          
+}
+
+
 function loadMemo(dramaNum) {
     $.ajax({
         url: "/app/memo/search",
@@ -273,7 +273,7 @@ function loadMemo(dramaNum) {
                 innerMemoArr.forEach((innerMemo) => {
                     innerMemo.value= x.memoContent;
             });
-                // innerMemo.value= x.memoContent;
+               // innerMemo.value= x.memoContent;
                 memoNumArr.forEach((memoNumV) => {
                     memoNumV.value = x.memoNum;
             });
@@ -287,43 +287,68 @@ function loadMemo(dramaNum) {
     })
 }
 
-const editDel = document.querySelector(".edit-delete");
-function updateDel(){
-    editDel.value="";
-}      
 
-const myFormArr = document.querySelectorAll('.myForm');
-for (i = 0; i < myFormArr.length; i++) {
-    myFormArr[i].addEventListener('submit', function(event) {
-        loadMemo('${vo.dramaNum}');
-  });
+function showBtn(){
+    innerMemoArr.forEach((element) => {
+   if(element.value.length > 1){
+            btnEditArr.forEach((btnEdArr) => {
+            btnEdArr.classList.add("active");
+        });
+            btnWriteArr.forEach((btnWrArr) => {
+            btnWrArr.classList.remove("active");
+        });
+
+        }else{
+            btnWriteArr.forEach((btnWrArr) => {
+            btnWrArr.classList.add("active");
+        });
+            btnEditArr.forEach((btnEdArr) => {
+            btnEdArr.classList.remove("active");
+        });
+        }
+
+});
 }
+  
 
 function editModal(){
-    	//모달 가져오기
-		const me = document.querySelector(".modal-edit");
-	   
-       //active 클래스        
-       me.classList.add("active");
+    //모달 가져오기
+    const me = document.querySelector(".modal-edit");
+    
+    //active 클래스        
+    me.classList.add("active");
 }
 
 function deleteModal(){
-    	//모달 가져오기
-		const md = document.querySelector(".modal-delete");
-	   
-       //active 클래스        
-       md.classList.add("active");
+    //모달 가져오기
+    const md = document.querySelector(".modal-delete");
+    
+    //active 클래스        
+    md.classList.add("active");
 }
+//메소드 제대로 실행 안됨.
+// function validEditMemo(){
+//     const editContentArr = document.querySelectorAll('.editContent01');
+//     if (editContentArr.value === '') {
+//     alert('수정할 내용을 입력해주세요.');
+//     return false;
+//   } 
+//   return true;
+// }
 
-
-function validMemo(){
-    const editContent = document.querySelector('#editContent');
-    if (editContent.value === '') {
-        alert('수정할 내용을 입력해주세요.');
-        return false;
+function validEditMemo() {
+  const editContentArr = document.querySelectorAll('.editContent');
+  
+  editContentArr.forEach(editContent => {
+    if (editContent.value.trim() === '') {
+      alert('수정할 내용을 입력해주세요.');
+      return false;
     }
-    return true;
+  });
+  return isValid;
 }
+
+
 
 function confirmDelMemo(){
     if (confirm("정말로 삭제하시겠습니까?")) {
