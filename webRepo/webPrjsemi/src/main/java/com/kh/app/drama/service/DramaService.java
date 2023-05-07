@@ -1,6 +1,7 @@
 package com.kh.app.drama.service;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.kh.app.common.db.JDBCTemplate;
@@ -50,6 +51,22 @@ public class DramaService {
 		return vo;
 	}
 
+	public int write(DramaVo vo) throws Exception {
+
+		int result = 0;
+		try (Connection conn = JDBCTemplate.getConnection();){
+			
+			 result = dao.write(conn, vo);
+			
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+				
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}
+		return result;
+	}
 
 
 }

@@ -133,6 +133,13 @@
 				</tbody>
 
 			</table>    
+			<div>
+				<c:if test="${ !empty loginMember}">
+					<div id="write-btn-area">
+						<a class="btn btn-primary" href="${root}/drama/write">작성하기</a>
+					</div>
+				</c:if>
+			</div>
 			<div id="search-area">
             	<form action="${root}/drama/list" method="get">
             		<input type="hidden" name="page" value="1">
@@ -165,11 +172,11 @@
 
 	//상세 조회
 	for (i = 0; i < td3Arr.length; i++) {
-   td3Arr[i].addEventListener('click', async function(e) {
-    const dramaNum = e.target.parentNode.children[0].innerText;
-    location.href = "${root}/drama/detail?dramaNum=" + dramaNum;
-  });
-}
+		td3Arr[i].addEventListener('click', function(e) {
+			const dramaNum = e.target.parentNode.children[0].innerText;
+			location.href = "${root}/drama/detail?page=${pv.currentPage}&dramaNum=" + dramaNum;
+		});
+    }
 
 	const searchType = '${searchVo.searchType}';
 	const searchValue = '${searchVo.searchValue}';
@@ -187,10 +194,10 @@
 	}
 	
 	//서치타입 변경 시 함수 실행+검색 값 비우기
-		 const searchTypeTag = document.querySelector('select[name="searchType"]');
-		 searchTypeTag.addEventListener("change" , function(){
-			searchValueInputTag.value = '';
-		 });
+	const searchTypeTag = document.querySelector('select[name="searchType"]');
+	searchTypeTag.addEventListener("change" , function(){
+		searchValueInputTag.value = '';
+	});
 
 </script>
 

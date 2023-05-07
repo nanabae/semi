@@ -164,6 +164,26 @@ public class DramaDao {
 				return vo;
 	}
 
+	public int write(Connection conn, DramaVo vo) throws Exception {
+		//SQL
+		String sql = "INSERT INTO DRAMA_BOARD (DRAMA_BRD_NUM, DRAMA_WRITER,CAT_NUM,TITLE,CONTENT) VALUES (SEQ_DRAMA_BOARD_NO.NEXTVAL, ?, ?,?,?)";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.valueOf(vo.getDramaWriter()));
+		pstmt.setInt(2, Integer.valueOf(vo.getCatNum()));
+		pstmt.setString(3, vo.getTitle());
+		pstmt.setString(4, vo.getContent());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+		
+	}
+	
+	
+	
+	
+	
+	}
 
 
-}

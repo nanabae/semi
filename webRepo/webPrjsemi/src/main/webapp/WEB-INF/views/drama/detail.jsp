@@ -207,12 +207,13 @@
                 <div>${ vo.content }</div>
             </div>
 
-            <c:if test="${ !empty loginMember}">
+            <c:if test="${ loginMember.memNum == vo.dramaWriter}">
                 <div id="drama-btn-area">
                     <a  href="${root}/drama/edit?dramaNum=${vo.dramaNum}">수정하기</a>
                     <a  href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제하기</a>
                 </div>
             </c:if>
+            <div> <a  href="${root}/drama/list?page=${param.page}">목록</a></div>
 
         <div id="reply-area">
             <input type="hidden" name="dramaNum" value="${vo.dramaNum}">
