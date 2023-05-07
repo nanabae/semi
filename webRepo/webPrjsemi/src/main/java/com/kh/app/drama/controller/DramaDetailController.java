@@ -21,7 +21,7 @@ public class DramaDetailController extends HttpServlet{
 			String dramaNum = req.getParameter("dramaNum");
 			
 			DramaVo vo = ds.selectDramaOneByNum(dramaNum);
-			System.out.println(vo);
+
 			//화면
 			if(vo != null) {
 				req.setAttribute("vo", vo);

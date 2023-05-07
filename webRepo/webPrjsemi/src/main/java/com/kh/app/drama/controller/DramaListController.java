@@ -50,7 +50,6 @@ public class DramaListController extends HttpServlet {
 			map.put("searchType", searchType);
 			map.put("searchValue", searchValue);
 			
-			System.out.println(pv);
 			//화면
 			req.setAttribute("catNum", catNum);
 			req.setAttribute("searchVo", map);
