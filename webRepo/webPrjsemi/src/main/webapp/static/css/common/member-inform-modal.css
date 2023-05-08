@@ -1,0 +1,32 @@
+#modal-wrap{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(211, 211, 211, 0.702);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-wrap.active{
+    display: flex;
+}
+
+#modal{
+    width: 30vw;
+    height: 50vh;
+    border: 5px solid black;
+    box-sizing: border-box;
+}
+
+#modal-body{
+    width: 200px;
+    height: 300px;
+    border: 1px solid black;
+    box-sizing: border-box;
+
+    margin: auto;
+    
+}
