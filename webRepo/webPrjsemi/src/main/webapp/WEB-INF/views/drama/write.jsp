@@ -41,11 +41,21 @@
 
 			<form action="${pageContext.request.contextPath}/drama/write" method="POST">
 				<div id="form-area">
+					<label>
+						말머리:
+						<select name="header">
+							<option value=""></option>
+						</select>
+						<input type="text">
+						<button type="button" onclick="regHeader();">말머리 추가</button>
+						<button type="button">말머리 삭제</button>
+					</label>
 					<select name="catNum">
             			<option value="1">잡담</option>
             			<option value="2">리뷰</option>
             			<option value="3">정보</option>
             		</select>
+
 					<input type="text" name="title" placeholder="제목을 입력하세요">
 					<textarea name="content" placeholder="내용을 입력하세요"></textarea>
 					<input type="submit" value="작성하기">
@@ -58,3 +68,36 @@
 
 </body>
 </html>
+
+<script>
+	function regHeader(){
+		
+		$.ajax({
+			url: "${root}/header",
+			type: "post",
+			data: { dramaNum: dramaNum },
+			success: function(data) {
+				x = JSON.parse(data);
+				if(x != null && x != ""){
+					memoAreaArr.forEach((area) => {
+					area.classList.add("active");
+					});
+					
+					memoText.innerHTML = x.memoContent;
+					innerMemoArr.forEach((innerMemo) => {
+						innerMemo.value= x.memoContent;
+					});
+					memoNumArr.forEach((memoNumV) => {
+						memoNumV.value = x.memoNum;
+					});
+					
+				}
+			},
+			error: function() {
+				console.log();
+			},
+		})
+
+
+	}
+</script>
