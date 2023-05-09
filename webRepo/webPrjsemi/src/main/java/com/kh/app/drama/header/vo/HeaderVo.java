@@ -40,6 +40,11 @@ public class HeaderVo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public String toString() {
+		return "HeaderVo [memHeadNum=" + memHeadNum + ", memNum=" + memNum + ", headerNum=" + headerNum
+				+ ", headerName=" + headerName + "]";
+	}
 	
 	
 	

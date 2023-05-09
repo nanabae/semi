@@ -43,8 +43,8 @@
 				<div id="form-area">
 					<label>
 						말머리:
-						<select name="header">
-							<option value=""></option>
+						<select name="header" class="select-header">
+							<option value="전체"></option>						
 						</select>
 						<input type="text" class="header-input">
 						<button type="button" onclick="regHeader();">말머리 추가</button>
@@ -70,19 +70,28 @@
 </html>
 
 <script>
+	// 말머리 등록
 	function regHeader(){
 		const headInputVal = document.querySelector('.header-input').value;
-		const x= document.querySelector('textarea[name=content]');
+		// select element 가져오기
+		const sHeader= document.querySelector(".select-header");
 		
-		
+		// 새로운 option element 만들기
+		const newOption = document.createElement("option");
+
+		// option을 select element에 추가하기
+		sHeader.appendChild(newOption);
+
 		$.ajax({
 			url: "${root}/header",
 			type: "post",
 			data: { headerName : headInputVal},
 			
 			success: function(data) {
-				console.log(data);
-				x.innerHTML = data;
+				x = JSON.parse(data);
+				// option의 value 값과 내용을 설정하기
+				newOption.value = x.headerNum
+				newOption.textContent = x.headerName; 
 			},
 			error: function() {
 				console.log();
@@ -90,5 +99,9 @@
 		})
 
 
+	}
+	
+	function loadHeader() {
+		
 	}
 </script>
