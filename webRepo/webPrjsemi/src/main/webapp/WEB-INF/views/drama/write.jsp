@@ -46,7 +46,7 @@
 						<select name="header">
 							<option value=""></option>
 						</select>
-						<input type="text">
+						<input type="text" class="header-input">
 						<button type="button" onclick="regHeader();">말머리 추가</button>
 						<button type="button">말머리 삭제</button>
 					</label>
@@ -71,27 +71,18 @@
 
 <script>
 	function regHeader(){
+		const headInputVal = document.querySelector('.header-input').value;
+		const x= document.querySelector('textarea[name=content]');
+		
 		
 		$.ajax({
 			url: "${root}/header",
 			type: "post",
-			data: { dramaNum: dramaNum },
+			data: { headerName : headInputVal},
+			
 			success: function(data) {
-				x = JSON.parse(data);
-				if(x != null && x != ""){
-					memoAreaArr.forEach((area) => {
-					area.classList.add("active");
-					});
-					
-					memoText.innerHTML = x.memoContent;
-					innerMemoArr.forEach((innerMemo) => {
-						innerMemo.value= x.memoContent;
-					});
-					memoNumArr.forEach((memoNumV) => {
-						memoNumV.value = x.memoNum;
-					});
-					
-				}
+				console.log(data);
+				x.innerHTML = data;
 			},
 			error: function() {
 				console.log();
