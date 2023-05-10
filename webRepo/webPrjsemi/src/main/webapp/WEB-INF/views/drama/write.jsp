@@ -39,12 +39,12 @@
 		
 			<h1 align="center">드라마방 게시글 작성</h1>
 
-			<form action="${pageContext.request.contextPath}/drama/write" method="POST">
+			<form action="${root}/drama/write" method="POST">
 				<div id="form-area">
 					<label>
 						말머리:
 						<select name="header" class="select-header">
-							<option value="전체"></option>						
+
 						</select>
 						<input type="text" class="header-input">
 						<button type="button" onclick="regHeader();">말머리 추가</button>
@@ -58,9 +58,10 @@
 
 					<input type="text" name="title" placeholder="제목을 입력하세요">
 					<textarea name="content" placeholder="내용을 입력하세요"></textarea>
-					<input type="submit" value="작성하기">
+					<input class="btn btn-dark" type="submit" value="작성하기"> </input>
 				</div>
 			</form>
+			<div> <a class="btn btn-dark" href='${root}/drama/list?page=${param.page}'>돌아가기</a></div>
 		
 		</main>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
@@ -70,6 +71,10 @@
 </html>
 
 <script>
+	//말머리 유무 검사 후 존재X않는 경우에만 말머리 등록하기.
+	function checkHeader(){
+
+	}
 	// 말머리 등록
 	function regHeader(){
 		const headInputVal = document.querySelector('.header-input').value;
@@ -101,6 +106,7 @@
 
 	}
 	
+	//말머리 불러오기
 	function loadHeader() {
 		
 	}

@@ -9,18 +9,12 @@
 <style>
     main table {
         width: 800px;
-		height: 650px;
         margin: auto;
         font-size: 24px;
+		line-height: 30px;
     }
-	thead{
-		height: 5%;
-	}
-	tbody{
-		height: 95%;
-	}
-	tbody>tr>td{
-		height: 5%;
+	main > table tr {
+		height: 30px;
 	}
 
     main table th , 
@@ -136,7 +130,7 @@
 			<div>
 				<c:if test="${ !empty loginMember}">
 					<div id="write-btn-area">
-						<a class="btn btn-primary" href="${root}/drama/write">작성하기</a>
+						<a class="btn btn-dark" href="${root}/drama/write?page=${param.page}">작성하기</a>
 					</div>
 				</c:if>
 			</div>

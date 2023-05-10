@@ -10,7 +10,7 @@ import com.kh.app.drama.header.vo.HeaderVo;
 
 public class HeaderDao {
 	
-	//말머리 등록(결과 2 or 1)
+	//말머리 등록(결과 2 or 1) 1.말머리 없는 경우 2. 말머리 있는 경우(1. 회원 말머리 존재 X경우에만 insert되어야함. 회원 말머리 존재하는 경우는 자스로 처리)
 	public int regHeader(Connection conn, HeaderVo vo) throws Exception {
 
 	String sql = "INSERT ALL WHEN NOT EXISTS (SELECT * FROM HEADER WHERE HEADER_NAME = ?) THEN INTO HEADER(HEADER_NUM, HEADER_NAME) VALUES(SEQ_HEADER_NO.NEXTVAL, ?) INTO MEM_HEADER(MEM_HEAD_NUM, MEM_NUM, HEADER_NUM) VALUES (SEQ_HEADER_NO.CURRVAL, ?, SEQ_HEADER_NO.CURRVAL) WHEN EXISTS (SELECT * FROM HEADER WHERE HEADER_NAME = ?) THEN INTO MEM_HEADER(MEM_HEAD_NUM, MEM_NUM, HEADER_NUM) VALUES (SEQ_HEADER_NO.NEXTVAL, ?, (SELECT HEADER_NUM FROM HEADER WHERE HEADER_NAME = ?)) SELECT 1 FROM DUAL";
@@ -50,7 +50,6 @@ public class HeaderDao {
 		}
 		JDBCTemplate.close(rs);
 		JDBCTemplate.close(pstmt);
-		System.out.println("dao에서 출력"+dbVo);
 		return dbVo;
 	}
 

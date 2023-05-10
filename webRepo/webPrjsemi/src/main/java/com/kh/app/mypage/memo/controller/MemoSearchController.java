@@ -31,7 +31,7 @@ public class MemoSearchController extends HttpServlet{
 			String memoWriter = loginMember.getMemNum();
 			
 			MemoVo vo = ms.selectMemoOneByno(memoWriter,dramaNum);
-			req.getSession().setAttribute("memoVo", vo);
+
 			//자바객체를 JSON 형태의 문자열로 변환
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson(vo);

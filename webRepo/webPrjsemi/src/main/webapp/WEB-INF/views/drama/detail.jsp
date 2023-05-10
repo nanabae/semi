@@ -75,7 +75,21 @@
 		
 	}
 
-   
+    #drama-btn-area{
+        width: 800px;
+        border: 2px solid black;
+        box-sizing: border-box;
+        margin: auto;
+    
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    #drama-btn-area > div:nth-child(2){
+        justify-self: end;
+    }
+
 
 </style>
 </head>
@@ -153,14 +167,18 @@
              
                 <div>${ vo.content }</div>
             </div>
+            <div id="drama-btn-area">
+                <c:if test="${ loginMember.memNum == vo.dramaWriter}">
+                    <div >
+                        <a class="btn btn-dark" href="${root}/drama/edit?dramaNum=${vo.dramaNum}">수정</a>
+                        <a  class="btn btn-dark" href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제</a>
+                    </div>
+                </c:if>
 
-            <c:if test="${ loginMember.memNum == vo.dramaWriter}">
-                <div id="drama-btn-area">
-                    <a  href="${root}/drama/edit?dramaNum=${vo.dramaNum}">수정</a>
-                    <a  href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제</a>
-                </div>
-            </c:if>
-            <div> <a  href="${root}/drama/list?page=${param.page}">목록</a></div>
+                <div> <a class="btn btn-dark" href= "${root}/drama/list?page=${param.page}">목록</a></div>
+            </div>
+            
+
 
         <div id="reply-area">
             <input type="hidden" name="dramaNum" value="${vo.dramaNum}">
