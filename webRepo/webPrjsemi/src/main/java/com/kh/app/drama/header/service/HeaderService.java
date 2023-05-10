@@ -3,6 +3,7 @@ package com.kh.app.drama.header.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.kh.app.common.db.JDBCTemplate;
 import com.kh.app.drama.header.dao.HeaderDao;
@@ -29,4 +30,20 @@ public class HeaderService {
 		return dbVo;
 		
 	}
+
+	public List<HeaderVo> selectListHeader(HeaderVo vo) throws Exception {
+		 Connection conn = JDBCTemplate.getConnection();
+		 
+		 List<HeaderVo> listVo =  dao.selectListHeader(conn,vo);
+		 
+		 JDBCTemplate.close(conn);
+
+
+		return listVo;
+	}
+	
+	
+	
+	
+	
 }

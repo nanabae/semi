@@ -2,6 +2,7 @@ package com.kh.app.drama.header.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +21,42 @@ public class HeaderRegisterController extends HttpServlet {
 	private HeaderService hs = new HeaderService();
 	
 	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
+		String memNum = loginMember.getMemNum();
+		String headerName = req.getParameter("headerName");
+			
+		HeaderVo vo = new HeaderVo();
+		vo.setMemNum(memNum);
+		vo.setHeaderName(headerName);
+		
+		try {
+			List<HeaderVo> listVo = hs.selectListHeader(vo);
+			System.out.println(listVo);
+			if(listVo != null) {
+				//자바객체를 JSON 형태의 문자열로 변환
+				Gson gson = new Gson();
+				String jsonStr = gson.toJson(listVo);
+
+				//문자열 내보내기
+				resp.setCharacterEncoding("UTF-8");
+				PrintWriter out = resp.getWriter();
+				out.write(jsonStr);
+			}else {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			System.out.println("Header search list doServie error");
+			e.printStackTrace();
+		}
+		req.getRequestDispatcher("/WEB-INF/views/drama/write.jsp").forward(req, resp);
+	}
+	
+	
+	
+	
+	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		
@@ -33,7 +70,7 @@ public class HeaderRegisterController extends HttpServlet {
 			vo.setHeaderName(headerName);
 			
 			HeaderVo dbVo = hs.regHeader(vo);
-
+			System.out.println(dbVo);
 			if(dbVo != null) {
 				//자바객체를 JSON 형태의 문자열로 변환
 				Gson gson = new Gson();

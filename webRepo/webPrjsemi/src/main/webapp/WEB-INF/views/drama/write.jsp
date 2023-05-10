@@ -75,12 +75,14 @@
 	function checkHeader(){
 
 	}
+
+	let headInputVal = document.querySelector('.header-input').value;
+		// select element 가져오기
+	let sHeader= document.querySelector(".select-header");
+		
 	// 말머리 등록
 	function regHeader(){
-		const headInputVal = document.querySelector('.header-input').value;
-		// select element 가져오기
-		const sHeader= document.querySelector(".select-header");
-		
+
 		// 새로운 option element 만들기
 		const newOption = document.createElement("option");
 
@@ -94,6 +96,7 @@
 			
 			success: function(data) {
 				x = JSON.parse(data);
+				console.log(x);
 				// option의 value 값과 내용을 설정하기
 				newOption.value = x.headerNum
 				newOption.textContent = x.headerName; 
@@ -108,6 +111,26 @@
 	
 	//말머리 불러오기
 	function loadHeader() {
-		
+
+		$.ajax({
+			url: "${root}/header",
+			type: "GET",
+			data: { headerName: headInputVal },
+			success: function(data) {
+				x = JSON.parse(data);
+				// 옵션값을 반복문으로 생성해서 select 태그에 추가
+				for (var i = 0; i < x.length; i++) {
+				var option = document.createElement("option");  
+				option.value = x[i].headerNum;
+				option.text = x[i].headerName;
+				ssHeader.appendChild(option);
+				}
+			},
+			error: function() {
+				console.log();
+			}
+			});
 	}
+	loadHeader();
+
 </script>

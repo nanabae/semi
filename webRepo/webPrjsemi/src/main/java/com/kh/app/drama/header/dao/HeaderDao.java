@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kh.app.common.db.JDBCTemplate;
 import com.kh.app.drama.header.vo.HeaderVo;
+import com.kh.app.drama.vo.DramaVo;
 
 public class HeaderDao {
 	
@@ -27,11 +30,14 @@ public class HeaderDao {
 	return result;
 	
 	}
-	//화면으로 보내 줄 값 조회
+	
+	//화면으로 보내 줄 값 조회(doPost)
 	public HeaderVo selectHeader(Connection conn, HeaderVo vo) throws Exception, Exception {
-		String sql ="SELECT MH.MEM_HEAD_NUM, MH.MEM_NUM,H.HEADER_NUM,H.HEADER_NAME FROM HEADER H JOIN MEM_HEADER MH ON (H.HEADER_NUM = MH.HEADER_NUM) WHERE MEM_NUM = ?";
+		String sql ="SELECT MH.MEM_HEAD_NUM, MH.MEM_NUM,H.HEADER_NUM,H.HEADER_NAME FROM HEADER H JOIN MEM_HEADER MH ON (H.HEADER_NUM = MH.HEADER_NUM) WHERE MEM_NUM = ? AND H.HEADER_NAME = ? ";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setInt(1, Integer.valueOf(vo.getMemNum()));
+		pstmt.setString(2, vo.getHeaderName());
+		
 		ResultSet rs = pstmt.executeQuery();
 		
 		HeaderVo dbVo = null;
@@ -52,6 +58,37 @@ public class HeaderDao {
 		JDBCTemplate.close(pstmt);
 		return dbVo;
 	}
+
+
+	//화면으로 보내 줄 값 조회(doGet)
+	public List<HeaderVo> selectListHeader(Connection conn, HeaderVo vo) throws Exception, Exception {
+		String sql ="SELECT MH.MEM_HEAD_NUM, MH.MEM_NUM,H.HEADER_NUM,H.HEADER_NAME FROM HEADER H JOIN MEM_HEADER MH ON (H.HEADER_NUM = MH.HEADER_NUM) WHERE MEM_NUM = ?  ";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.valueOf(vo.getMemNum()));
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		List<HeaderVo> listVo = new ArrayList<>();
+		while(rs.next()) {
+			String memHeadNum = rs.getString("MEM_HEAD_NUM");
+			String memNum = rs.getString("MEM_NUM");
+			String headerNum = rs.getString("HEADER_NUM");
+			String headerName = rs.getString("HEADER_NAME");
+			
+			HeaderVo dbVo = new HeaderVo();
+			dbVo.setMemHeadNum(memHeadNum);
+			dbVo.setMemNum(memNum);
+			dbVo.setHeaderNum(headerNum);
+			dbVo.setHeaderName(headerName);
+			
+			listVo.add(dbVo);
+					
+		}
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+		return listVo;
+	}
+
 
 }
 
