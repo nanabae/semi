@@ -20,19 +20,20 @@ public class HeaderRegisterController extends HttpServlet {
 	
 	private HeaderService hs = new HeaderService();
 	
+	//말머리 불러오기
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
 		String memNum = loginMember.getMemNum();
 		String headerName = req.getParameter("headerName");
-			
+		System.out.println(headerName);
 		HeaderVo vo = new HeaderVo();
 		vo.setMemNum(memNum);
 		vo.setHeaderName(headerName);
 		
 		try {
 			List<HeaderVo> listVo = hs.selectListHeader(vo);
-			System.out.println(listVo);
+
 			if(listVo != null) {
 				//자바객체를 JSON 형태의 문자열로 변환
 				Gson gson = new Gson();
@@ -49,13 +50,10 @@ public class HeaderRegisterController extends HttpServlet {
 			System.out.println("Header search list doServie error");
 			e.printStackTrace();
 		}
-		req.getRequestDispatcher("/WEB-INF/views/drama/write.jsp").forward(req, resp);
 	}
 	
-	
-	
-	
-	
+
+	//말머리 등록	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -64,13 +62,13 @@ public class HeaderRegisterController extends HttpServlet {
 			MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
 			String memNum = loginMember.getMemNum();
 			String headerName = req.getParameter("headerName");
-				
+
 			HeaderVo vo = new HeaderVo();
 			vo.setMemNum(memNum);
 			vo.setHeaderName(headerName);
 			
 			HeaderVo dbVo = hs.regHeader(vo);
-			System.out.println(dbVo);
+
 			if(dbVo != null) {
 				//자바객체를 JSON 형태의 문자열로 변환
 				Gson gson = new Gson();

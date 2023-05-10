@@ -71,18 +71,36 @@
 </html>
 
 <script>
-	//말머리 유무 검사 후 존재X않는 경우에만 말머리 등록하기.
-	function checkHeader(){
-
-	}
-
-	let headInputVal = document.querySelector('.header-input').value;
-		// select element 가져오기
 	let sHeader= document.querySelector(".select-header");
+	//말머리 불러오기
+	function loadHeader() {
+
+	$.ajax({
+		url: "${root}/header",
+		type: "GET",
+		success: function(data) {
+			x = JSON.parse(data);
+			// 옵션값을 반복문으로 생성해서 select 태그에 추가
+			for (var i = 0; i < x.length; i++) {
+			var option = document.createElement("option");  
+			option.value = x[i].headerNum;
+			option.text = x[i].headerName;
+			sHeader.appendChild(option);
+			}
+		},
+		error: function() {
+			console.log();
+		}
+		});
+	}
+	loadHeader();
+
+
 		
 	// 말머리 등록
 	function regHeader(){
-
+		//초기화 해 줄 것(페이지 로드 시점에 사용자 입력값이 아닌 빈값)
+		let headInputVal = document.querySelector('.header-input').value;
 		// 새로운 option element 만들기
 		const newOption = document.createElement("option");
 
@@ -109,28 +127,6 @@
 
 	}
 	
-	//말머리 불러오기
-	function loadHeader() {
-
-		$.ajax({
-			url: "${root}/header",
-			type: "GET",
-			data: { headerName: headInputVal },
-			success: function(data) {
-				x = JSON.parse(data);
-				// 옵션값을 반복문으로 생성해서 select 태그에 추가
-				for (var i = 0; i < x.length; i++) {
-				var option = document.createElement("option");  
-				option.value = x[i].headerNum;
-				option.text = x[i].headerName;
-				ssHeader.appendChild(option);
-				}
-			},
-			error: function() {
-				console.log();
-			}
-			});
-	}
-	loadHeader();
+	
 
 </script>
