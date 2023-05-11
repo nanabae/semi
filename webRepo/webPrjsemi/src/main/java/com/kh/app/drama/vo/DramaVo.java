@@ -5,6 +5,7 @@ public class DramaVo {
 	private String dramaNum;
 	private String dramaWriter;
 	private String catNum;
+	private String headerNum;
 	private String title;
 	private String content;
 	private String status;
@@ -14,7 +15,6 @@ public class DramaVo {
 	private String anonymity;
 	private String catName;
 	private String writerName;
-	
 	public String getDramaNum() {
 		return dramaNum;
 	}
@@ -32,6 +32,12 @@ public class DramaVo {
 	}
 	public void setCatNum(String catNum) {
 		this.catNum = catNum;
+	}
+	public String getHeaderNum() {
+		return headerNum;
+	}
+	public void setHeaderNum(String headerNum) {
+		this.headerNum = headerNum;
 	}
 	public String getTitle() {
 		return title;
@@ -89,17 +95,19 @@ public class DramaVo {
 	}
 	@Override
 	public String toString() {
-		return "DramaVo [dramaNum=" + dramaNum + ", dramaWriter=" + dramaWriter + ", catNum=" + catNum + ", title="
-				+ title + ", content=" + content + ", status=" + status + ", enrollDate=" + enrollDate + ", modifyDate="
-				+ modifyDate + ", hit=" + hit + ", anonymity=" + anonymity + ", catName=" + catName + ", writerName="
-				+ writerName + "]";
+		return "DramaVo [dramaNum=" + dramaNum + ", dramaWriter=" + dramaWriter + ", catNum=" + catNum + ", headerNum="
+				+ headerNum + ", title=" + title + ", content=" + content + ", status=" + status + ", enrollDate="
+				+ enrollDate + ", modifyDate=" + modifyDate + ", hit=" + hit + ", anonymity=" + anonymity + ", catName="
+				+ catName + ", writerName=" + writerName + "]";
 	}
-	public DramaVo(String dramaNum, String dramaWriter, String catNum, String title, String content, String status,
-			String enrollDate, String modifyDate, int hit, String anonymity, String catName, String writerName) {
+	public DramaVo(String dramaNum, String dramaWriter, String catNum, String headerNum, String title, String content,
+			String status, String enrollDate, String modifyDate, int hit, String anonymity, String catName,
+			String writerName) {
 		super();
 		this.dramaNum = dramaNum;
 		this.dramaWriter = dramaWriter;
 		this.catNum = catNum;
+		this.headerNum = headerNum;
 		this.title = title;
 		this.content = content;
 		this.status = status;
@@ -114,6 +122,7 @@ public class DramaVo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	
 	
 	

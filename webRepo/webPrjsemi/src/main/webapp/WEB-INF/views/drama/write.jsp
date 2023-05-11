@@ -105,6 +105,7 @@
 
 		for (const element of optionArr) {
 			if (element.text === headInputVal) {
+				console.log(element.text);
 			isValid = false;
 			break;
 			}
@@ -140,6 +141,7 @@
 				// option의 value 값과 내용을 설정하기
 				newOption.value = x.headerNum
 				newOption.textContent = x.headerName; 
+				newOption.selected = true;
 			},
 			error: function() {
 				console.log();
@@ -148,6 +150,18 @@
 
 
 	}
+
+	//선택된 말머리 selected
+
+	//셀렉트 값 변경시 인풋 비워주기
+		sHeader.addEventListener("change" , function(){
+			let headInput = document.querySelector('.header-input');
+			headInput.value = '';
+	});
+
+	// sHeader.addEventListener("change" , function(){
+	// 	const checkedOption = document.querySelector('select > option:checked');
+	// });
 
 	
 

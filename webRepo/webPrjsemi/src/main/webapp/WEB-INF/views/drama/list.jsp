@@ -94,6 +94,7 @@
 					<tr>
 						<th>번호</th>
 						<th>분류</th>
+						<th>말머리</th>
 						<th>제목</th>
 						<th>글쓴이</th>
 						<th>날짜</th>
@@ -107,6 +108,7 @@
 						<tr>
 							<td class="td1">${ drama.dramaNum }</td>
 							<td>${ drama.catName }</td>
+							<td>${drama.headerNum }</td>
 							<td class="td3">${ drama.title }</td>
 							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>
 							<c:if test="${!empty loginMember }">
