@@ -26,7 +26,7 @@ public class HeaderDao {
 	pstmt.setString(6, vo.getHeaderName());
 
 	int result = pstmt.executeUpdate();
-	System.out.println("등록 결과 성공하면 1이나 2가 나옴"+result);
+
 	JDBCTemplate.close(pstmt);
 	return result;
 	

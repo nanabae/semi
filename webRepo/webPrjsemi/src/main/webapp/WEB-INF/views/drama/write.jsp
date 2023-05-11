@@ -47,7 +47,7 @@
 
 						</select>
 						<input type="text" class="header-input">
-						<button type="button" onclick="regHeader();">말머리 추가</button>
+						<button type="button" onclick="checkHeader();">말머리 추가</button>
 						<button type="button">말머리 삭제</button>
 					</label>
 					<select name="catNum">
@@ -72,31 +72,53 @@
 
 <script>
 	let sHeader= document.querySelector(".select-header");
+
 	//말머리 불러오기
 	function loadHeader() {
 
-	$.ajax({
-		url: "${root}/header",
-		type: "GET",
-		success: function(data) {
-			x = JSON.parse(data);
-			// 옵션값을 반복문으로 생성해서 select 태그에 추가
-			for (var i = 0; i < x.length; i++) {
-			var option = document.createElement("option");  
-			option.value = x[i].headerNum;
-			option.text = x[i].headerName;
-			sHeader.appendChild(option);
+		$.ajax({
+			url: "${root}/header",
+			type: "GET",
+			success: function(data) {
+				x = JSON.parse(data);
+				// 옵션값을 반복문으로 생성해서 select 태그에 추가
+				for (var i = 0; i < x.length; i++) {
+				var option = document.createElement("option");  
+				option.value = x[i].headerNum;
+				option.text = x[i].headerName;
+				sHeader.appendChild(option);
+				}
+			},
+			error: function() {
+				console.log();
 			}
-		},
-		error: function() {
-			console.log();
+			});
 		}
-		});
-	}
 	loadHeader();
 
+	//말머리 유무 검사 후 존재X않는 경우에만 말머리 등록하기.
+	function checkHeader() {
+		const optionArr = document.querySelectorAll(".select-header option");
+		const headInputVal = document.querySelector(".header-input").value;
 
-		
+		let isValid = true;
+
+		for (const element of optionArr) {
+			if (element.text === headInputVal) {
+			isValid = false;
+			break;
+			}
+		}
+
+		if (isValid) {
+			regHeader();
+		}else{
+			alert("이미 등록된 말머리 존재가 존재합니다.");
+		}
+	
+	}
+
+
 	// 말머리 등록
 	function regHeader(){
 		//초기화 해 줄 것(페이지 로드 시점에 사용자 입력값이 아닌 빈값)
@@ -126,7 +148,7 @@
 
 
 	}
-	
+
 	
 
 </script>

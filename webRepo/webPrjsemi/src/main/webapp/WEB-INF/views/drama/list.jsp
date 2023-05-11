@@ -61,6 +61,21 @@
 		margin: auto;
 		
 	}
+
+	#write-btn-area{
+		display : flex;
+		flex-direction: row-reverse;
+		width:800px;
+		margin:auto;
+
+	}
+
+	#search-area{
+		display : flex;
+		justify-content: center;
+		width:800px;
+		margin:auto;
+	}
 </style>
 
 </head>
@@ -130,7 +145,7 @@
 			<div>
 				<c:if test="${ !empty loginMember}">
 					<div id="write-btn-area">
-						<a class="btn btn-dark" href="${root}/drama/write?page=${param.page}">작성하기</a>
+						<a  class="btn btn-dark" href="${root}/drama/write?page=${param.page}">작성하기</a>
 					</div>
 				</c:if>
 			</div>

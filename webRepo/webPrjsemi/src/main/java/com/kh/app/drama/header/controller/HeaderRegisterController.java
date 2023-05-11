@@ -25,11 +25,11 @@ public class HeaderRegisterController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
 		String memNum = loginMember.getMemNum();
-		String headerName = req.getParameter("headerName");
-		System.out.println(headerName);
+//		String headerName = req.getParameter("headerName");
+
 		HeaderVo vo = new HeaderVo();
 		vo.setMemNum(memNum);
-		vo.setHeaderName(headerName);
+//		vo.setHeaderName(headerName);
 		
 		try {
 			List<HeaderVo> listVo = hs.selectListHeader(vo);
