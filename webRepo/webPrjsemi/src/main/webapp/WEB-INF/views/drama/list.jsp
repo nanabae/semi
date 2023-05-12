@@ -10,7 +10,6 @@
     main table {
         width: 800px;
         margin: auto;
-        font-size: 24px;
 		line-height: 30px;
     }
 	main > table tr {
@@ -22,7 +21,7 @@
         border: 1px solid black;
     }
 
-	.td3:hover {
+	.td4:hover {
 		cursor: pointer;
 	}	
 	td>a{
@@ -103,13 +102,15 @@
 				</thead>
 
 				<tbody>
-					
+			
 					<c:forEach items="${ list }" var="drama">
 						<tr>
 							<td class="td1">${ drama.dramaNum }</td>
 							<td>${ drama.catName }</td>
-							<td>${drama.headerNum }</td>
-							<td class="td3">${ drama.title }</td>
+							<c:if test="${empty drama.headerName }"><td> </td></c:if>
+							<c:if test="${!empty drama.headerName }"><td class="td3"><a href="${root}/drama/list?page=1&catNum=${catNum}&headerNum=${drama.headerNum}" >${ drama.headerName }</a></td></c:if>
+							
+							<td class="td4">${ drama.title }</td>
 							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>
 							<c:if test="${!empty loginMember }">
 								<td><a href="javascript:toggleModal('${ drama.writerName }','${ drama.dramaWriter }')">${ drama.writerName }</a>
@@ -154,11 +155,11 @@
 			<div id="search-area">
             	<form action="${root}/drama/list" method="get">
             		<input type="hidden" name="page" value="1">
-            		<input type="hidden" name="catNum" value="${catNum}">
+            		<input type="hidden" name="catNum" value="${param.catNum}">
+            		<input type="hidden" name="headerNum" value="${param.headerNum}">
                     	<select name="searchType">
 						<option value="all">전체</option>
             			<option value="title">제목</option>
-						
             			<option value="writer">작성자</option>
             			<option value="content">내용</option>
             		</select>
@@ -169,9 +170,9 @@
 			
 			<div id="page-area">
 				<%@ include file="/WEB-INF/views/common/page-area.jsp"%>
-
 			</div>
-    
+			${pv}
+	   
         </main>
             <%@ include file="/WEB-INF/views/common/footer.jsp"%>	  
     </div>
@@ -179,15 +180,18 @@
 </html>
 <script>
 	const td3Arr = document.querySelectorAll('.td3');
+	const td4Arr = document.querySelectorAll('.td4');
 	const td1Arr = document.querySelectorAll('.td1');
 
 	//상세 조회
-	for (i = 0; i < td3Arr.length; i++) {
-		td3Arr[i].addEventListener('click', function(e) {
+	for (i = 0; i < td4Arr.length; i++) {
+		td4Arr[i].addEventListener('click', function(e) {
 			const dramaNum = e.target.parentNode.children[0].innerText;
 			location.href = "${root}/drama/detail?page=${pv.currentPage}&dramaNum=" + dramaNum;
 		});
     }
+
+	
 
 	const searchType = '${searchVo.searchType}';
 	const searchValue = '${searchVo.searchValue}';

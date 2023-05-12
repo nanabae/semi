@@ -15,6 +15,7 @@ public class DramaVo {
 	private String anonymity;
 	private String catName;
 	private String writerName;
+	private String headerName;
 	public String getDramaNum() {
 		return dramaNum;
 	}
@@ -93,16 +94,22 @@ public class DramaVo {
 	public void setWriterName(String writerName) {
 		this.writerName = writerName;
 	}
+	public String getHeaderName() {
+		return headerName;
+	}
+	public void setHeaderName(String headerName) {
+		this.headerName = headerName;
+	}
 	@Override
 	public String toString() {
 		return "DramaVo [dramaNum=" + dramaNum + ", dramaWriter=" + dramaWriter + ", catNum=" + catNum + ", headerNum="
 				+ headerNum + ", title=" + title + ", content=" + content + ", status=" + status + ", enrollDate="
 				+ enrollDate + ", modifyDate=" + modifyDate + ", hit=" + hit + ", anonymity=" + anonymity + ", catName="
-				+ catName + ", writerName=" + writerName + "]";
+				+ catName + ", writerName=" + writerName + ", headerName=" + headerName + "]";
 	}
 	public DramaVo(String dramaNum, String dramaWriter, String catNum, String headerNum, String title, String content,
 			String status, String enrollDate, String modifyDate, int hit, String anonymity, String catName,
-			String writerName) {
+			String writerName, String headerName) {
 		super();
 		this.dramaNum = dramaNum;
 		this.dramaWriter = dramaWriter;
@@ -117,11 +124,13 @@ public class DramaVo {
 		this.anonymity = anonymity;
 		this.catName = catName;
 		this.writerName = writerName;
+		this.headerName = headerName;
 	}
 	public DramaVo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	
 	
 	

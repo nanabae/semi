@@ -14,7 +14,7 @@
         margin: auto;
 
         display: grid;
-        grid-template-columns: 100px 1fr 100px;
+        grid-template-columns: 100px 100px 1fr 100px;
         grid-template-rows: 50px 30px 30px 1fr;
         align-items: center;
     }
@@ -25,16 +25,16 @@
 		width: 100%;
 		height: 100%;
 	}
-    #drama-area > div:nth-child(4) {
-		grid-column: span 2;
-	}
-    #drama-area > div:nth-child(6) {
+    #drama-area > div:nth-child(5) {
 		grid-column: span 3;
+	}
+    #drama-area > div:nth-child(7) {
+		grid-column: span 4;
        
 	}
 
-    #drama-area > div:nth-child(7) {
-		grid-column: span 3;
+    #drama-area > div:nth-child(8) {
+		grid-column: span 4;
        
 	}
     #drama-area ul{
@@ -105,6 +105,7 @@
 
             <div id="drama-area">
                 <div>${ vo.catName }</div>
+                <div>${ vo.headerName }</div>
                 <div>${ vo.title }</div>
                 <c:if test="${empty loginMember }"><div>${ vo.writerName }</div></c:if>
                 <c:if test="${!empty loginMember }">
@@ -216,7 +217,7 @@ const innerMemoArr = document.querySelectorAll('.innerMemo');
 const btnWriteArr = document.querySelectorAll(".btnWrite");
 const btnEditArr= document.querySelectorAll(".btnEdit");
 
-// 드디어 해결. 읽어오는 속도때문에 문제였다. 코드에는 문제가 없었는데 
+// 읽어오는 속도때문에 문제
 if("${loginMember}" != null && "${loginMember}" !=""){
     loadMemo('${vo.dramaNum}');
     setTimeout(showBtn,500)          

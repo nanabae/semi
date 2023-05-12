@@ -12,20 +12,20 @@ import com.kh.app.drama.vo.DramaVo;
 public class DramaService {
 	private final DramaDao dao = new DramaDao();
 	
-	public int getDramaListCnt(String catNum, String searchType, String searchValue) throws Exception {
+	public int getDramaListCnt(String catNum, String searchType, String searchValue , String headerNum) throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int cnt = dao.getDramaListCnt(conn,catNum,searchType, searchValue);
+		int cnt = dao.getDramaListCnt(conn,catNum,searchType, searchValue ,headerNum);
 		
 		JDBCTemplate.close(conn);
 		
 		return cnt;
 	}
 
-	public List<DramaVo> selectDramaList(PageVo pv, String catNum, String searchType, String searchValue) throws Exception {
+	public List<DramaVo> selectDramaList(PageVo pv, String catNum, String searchType, String searchValue ,String headerNum) throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		List<DramaVo> list = dao.selectDramaList(conn , pv , catNum, searchType, searchValue);
+		List<DramaVo> list = dao.selectDramaList(conn , pv , catNum, searchType, searchValue,headerNum);
 		
 		JDBCTemplate.close(conn);
 		
