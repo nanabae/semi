@@ -220,7 +220,7 @@ const btnEditArr= document.querySelectorAll(".btnEdit");
 // 읽어오는 속도때문에 문제
 if("${loginMember}" != null && "${loginMember}" !=""){
     loadMemo('${vo.dramaNum}');
-    setTimeout(showBtn,500)          
+    setTimeout(showBtn,700)          
 }
 
 
@@ -254,6 +254,7 @@ function loadMemo(dramaNum) {
 
 
 function showBtn(){
+    const innerMemoArr = document.querySelectorAll('.innerMemo');
     innerMemoArr.forEach((element) => {
     if(element.value.length > 1){
         btnEditArr.forEach((btnEdArr) => {

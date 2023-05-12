@@ -108,7 +108,7 @@
 							<td class="td1">${ drama.dramaNum }</td>
 							<td>${ drama.catName }</td>
 							<c:if test="${empty drama.headerName }"><td> </td></c:if>
-							<c:if test="${!empty drama.headerName }"><td class="td3"><a href="${root}/drama/list?page=1&catNum=${catNum}&headerNum=${drama.headerNum}" >${ drama.headerName }</a></td></c:if>
+							<c:if test="${!empty drama.headerName }"><td class="td3"><a href="${root}/drama/list?page=1&catNum=${drama.catNum}&headerNum=${drama.headerNum}" >${ drama.headerName }</a></td></c:if>
 							
 							<td class="td4">${ drama.title }</td>
 							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>

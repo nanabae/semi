@@ -91,6 +91,19 @@ public class HeaderDao {
 		return listVo;
 	}
 
+	public int deleteHeader(Connection conn, HeaderVo vo) throws Exception  {
+		String sql = "DELETE MEM_HEADER WHERE HEADER_NUM = ? AND MEM_NUM = ?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1,Integer.valueOf(vo.getHeaderNum()) );
+		pstmt.setInt(2, Integer.valueOf(vo.getMemNum()));
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
+
 
 }
 

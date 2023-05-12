@@ -41,6 +41,20 @@ public class HeaderService {
 
 		return listVo;
 	}
+
+	public int deleteHeader(HeaderVo vo) throws Exception {
+		int result ;
+		try(Connection conn = JDBCTemplate.getConnection();){
+			result = dao.deleteHeader(conn, vo);
+			//tx || rs
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}
+		return result;
+	}
 	
 	
 	
