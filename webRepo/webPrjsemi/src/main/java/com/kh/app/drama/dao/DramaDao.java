@@ -104,7 +104,7 @@ public class DramaDao {
 			String anonymity = rs.getString("ANONYMITY");
 			String writerName = rs.getString("MEM_NICK");
 			String catName= rs.getString("CAT_NAME");
-			headerNum = rs.getString("HEADER_NUM");
+			 headerNum = rs.getString("HEADER_NUM");
 			String headerName = rs.getString("HEADER_NAME");
 			
 			DramaVo vo = new DramaVo();
@@ -149,7 +149,7 @@ public class DramaDao {
 	//상세 조회
 	public DramaVo selectDramaOneByNo(Connection conn, String dramaNum) throws Exception {
 		//SQL
-				String sql = "SELECT DRAMA_BRD_NUM , DRAMA_WRITER ,M.MEM_NICK, D.CAT_NUM ,C.CAT_NAME, TITLE , CONTENT ,  STATUS , TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD HH:MM') AS ENROLL_DATE , MODIFY_DATE , HIT, ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) WHERE DRAMA_BRD_NUM = ? AND STATUS = 'O'";
+				String sql = "SELECT DRAMA_BRD_NUM , DRAMA_WRITER ,M.MEM_NICK, D.CAT_NUM , C.CAT_NAME, H.HEADER_NAME , TITLE , CONTENT ,  STATUS , TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD HH:MM') AS ENROLL_DATE , MODIFY_DATE , HIT, ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN HEADER H ON ( D.HEADER_NUM = H.HEADER_NUM) WHERE DRAMA_BRD_NUM = ? AND STATUS = 'O'";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, dramaNum);
 				ResultSet rs = pstmt.executeQuery();
@@ -159,6 +159,7 @@ public class DramaDao {
 				if(rs.next()) {
 					String dramaWriter = rs.getString("DRAMA_WRITER");
 					String catNum = rs.getString("CAT_NUM");
+					String headerName = rs.getString("HEADER_NAME");
 					String title = rs.getString("TITLE");
 					String content = rs.getString("CONTENT");
 					String status = rs.getString("STATUS");
@@ -182,6 +183,7 @@ public class DramaDao {
 					vo.setAnonymity(anonymity);
 					vo.setCatName(catName);
 					vo.setWriterName(writerName);
+					vo.setHeaderName(headerName);
 				}
 				
 				//close
