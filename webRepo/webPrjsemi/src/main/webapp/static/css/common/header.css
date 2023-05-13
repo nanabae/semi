@@ -18,8 +18,7 @@ header{
     box-sizing: border-box;
 }
 
-
- nav{
+nav{
    display: flex;
    justify-content: right;
    align-items: center;
