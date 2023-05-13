@@ -1,6 +1,6 @@
 
 	
-	function toggleModal(writerName,dramaWriter){
+	function toggleModal(writerName,dramaWriter,dramaNum ){
 		//모달 가져오기
 		const mw = document.querySelector("#modal-wrap");
 	   

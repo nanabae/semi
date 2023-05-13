@@ -18,7 +18,7 @@ public class DramaDao {
 		String sql = "SELECT COUNT(*) FROM DRAMA_BOARD D JOIN MEMBER M ON (D.DRAMA_WRITER = M.MEM_NUM) JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) LEFT OUTER JOIN HEADER H ON (D.HEADER_NUM = H.HEADER_NUM)";
 		if( headerNum.equals("") && catNum.equals("")) {
 			sql += " WHERE STATUS = 'O'";
-		} else if( catNum.equals("") && !headerNum.equals("")) {
+		}else if( catNum.equals("") && !headerNum.equals("")) {
 		    sql += " WHERE STATUS = 'O' AND D.HEADER_NUM = " + headerNum +"";
 		}else if( headerNum.equals("") && !catNum.equals("")) {
 		    sql += " WHERE STATUS = 'O' AND D.Cat_NUM = " + catNum +"";
@@ -29,13 +29,11 @@ public class DramaDao {
 		
 		if ("all".equals(searchType)) {
 			sql += " AND  TITLE LIKE '%" + searchValue + "%' OR MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%'";
-	        }
-
-	    else if ("title".equals(searchType)) {
-		    sql += " AND TITLE LIKE '%" + searchValue + "%'";
-		} else if ("writer".equals(searchType)) {
+        }else if ("title".equals(searchType)) {
+        	sql += " AND TITLE LIKE '%" + searchValue + "%'";
+		}else if ("writer".equals(searchType)) {
 		    sql += " AND MEM_NICK LIKE '%" + searchValue + "%'";
-		} else if ("content".equals(searchType)) {
+		}else if ("content".equals(searchType)) {
 		    sql += " AND CONTENT LIKE '%" + searchValue + "%'";
 		}
 
@@ -73,11 +71,11 @@ public class DramaDao {
 
 		if ("all".equals(searchType)) {
 		    sql += " AND (D.TITLE LIKE '%" + searchValue + "%' OR M.MEM_NICK LIKE '%" + searchValue + "%' OR CONTENT LIKE '%" + searchValue + "%' )ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?"; //()중요
-		} else if ("title".equals(searchType)) {
+		}else if ("title".equals(searchType)) {
 		    sql += "AND D.TITLE LIKE '%" + searchValue + "%' ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		} else if ("writer".equals(searchType)) {
+		}else if ("writer".equals(searchType)) {
 		    sql += " AND M.MEM_NICK LIKE '%" + searchValue + "%'  ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
-		} else if ("content".equals(searchType)) {
+		}else if ("content".equals(searchType)) {
 		    sql += " AND D.CONTENT LIKE '%" + searchValue + "%'  ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
 		}else {
 			sql += "ORDER BY DRAMA_BRD_NUM DESC ) T ) WHERE RNUM BETWEEN ? AND ?";
@@ -103,7 +101,7 @@ public class DramaDao {
 			String anonymity = rs.getString("ANONYMITY");
 			String writerName = rs.getString("MEM_NICK");
 			String catName= rs.getString("CAT_NAME");
-			 headerNum = rs.getString("HEADER_NUM");
+			headerNum = rs.getString("HEADER_NUM");
 			String headerName = rs.getString("HEADER_NAME");
 			
 			DramaVo vo = new DramaVo();
@@ -148,48 +146,48 @@ public class DramaDao {
 	//상세 조회
 	public DramaVo selectDramaOneByNo(Connection conn, String dramaNum) throws Exception {
 		//SQL
-				String sql = "SELECT DRAMA_BRD_NUM , DRAMA_WRITER ,M.MEM_NICK, D.CAT_NUM , C.CAT_NAME, H.HEADER_NAME , TITLE , CONTENT ,  STATUS , TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD HH:MM') AS ENROLL_DATE , MODIFY_DATE , HIT, ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) JOIN HEADER H ON ( D.HEADER_NUM = H.HEADER_NUM) WHERE DRAMA_BRD_NUM = ? AND STATUS = 'O'";
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, dramaNum);
-				ResultSet rs = pstmt.executeQuery();
+		String sql = "SELECT DRAMA_BRD_NUM , DRAMA_WRITER ,M.MEM_NICK, D.CAT_NUM , C.CAT_NAME, H.HEADER_NAME , TITLE , CONTENT ,  STATUS , TO_CHAR(D.ENROLL_DATE, 'YYYY-MM-DD HH:MM') AS ENROLL_DATE , MODIFY_DATE , HIT, ANONYMITY FROM DRAMA_BOARD D JOIN CATEGORY C ON (D.CAT_NUM = C.CAT_NUM) JOIN MEMBER M ON(D.DRAMA_WRITER = M.MEM_NUM) LEFT OUTER JOIN HEADER H ON ( D.HEADER_NUM = H.HEADER_NUM) WHERE DRAMA_BRD_NUM = ? AND STATUS = 'O'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, dramaNum);
+		ResultSet rs = pstmt.executeQuery();
+		
+		//tx || rs
+		DramaVo vo = null;
+		if(rs.next()) {
+			String dramaWriter = rs.getString("DRAMA_WRITER");
+			String catNum = rs.getString("CAT_NUM");
+			String headerName = rs.getString("HEADER_NAME");
+			String title = rs.getString("TITLE");
+			String content = rs.getString("CONTENT");
+			String status = rs.getString("STATUS");
+			String enrollDate = rs.getString("ENROLL_DATE");					
+			String modifyDate = rs.getString("MODIFY_DATE");
+			int hit = rs.getInt("HIT");
+			String anonymity = rs.getString("ANONYMITY");
+			String catName = rs.getString("CAT_NAME");
+			String writerName = rs.getString("MEM_NICK");
+			
+			vo = new DramaVo();
+			vo.setDramaNum(dramaNum);
+			vo.setDramaWriter(dramaWriter);
+			vo.setCatNum(catNum);
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setStatus(status);
+			vo.setEnrollDate(enrollDate);
+			vo.setModifyDate(modifyDate);
+			vo.setHit(hit);
+			vo.setAnonymity(anonymity);
+			vo.setCatName(catName);
+			vo.setWriterName(writerName);
+			vo.setHeaderName(headerName);
+		}
 				
-				//tx || rs
-				DramaVo vo = null;
-				if(rs.next()) {
-					String dramaWriter = rs.getString("DRAMA_WRITER");
-					String catNum = rs.getString("CAT_NUM");
-					String headerName = rs.getString("HEADER_NAME");
-					String title = rs.getString("TITLE");
-					String content = rs.getString("CONTENT");
-					String status = rs.getString("STATUS");
-					String enrollDate = rs.getString("ENROLL_DATE");					
-					String modifyDate = rs.getString("MODIFY_DATE");
-					int hit = rs.getInt("HIT");
-					String anonymity = rs.getString("ANONYMITY");
-					String catName = rs.getString("CAT_NAME");
-					String writerName = rs.getString("MEM_NICK");
-					
-					vo = new DramaVo();
-					vo.setDramaNum(dramaNum);
-					vo.setDramaWriter(dramaWriter);
-					vo.setCatNum(catNum);
-					vo.setTitle(title);
-					vo.setContent(content);
-					vo.setStatus(status);
-					vo.setEnrollDate(enrollDate);
-					vo.setModifyDate(modifyDate);
-					vo.setHit(hit);
-					vo.setAnonymity(anonymity);
-					vo.setCatName(catName);
-					vo.setWriterName(writerName);
-					vo.setHeaderName(headerName);
-				}
-				
-				//close
-				JDBCTemplate.close(rs);
-				JDBCTemplate.close(pstmt);
-				
-				return vo;
+			//close
+			JDBCTemplate.close(rs);
+			JDBCTemplate.close(pstmt);
+			
+			return vo;
 	}
 
 	public int write(Connection conn, DramaVo vo) throws Exception {
@@ -217,8 +215,6 @@ public class DramaDao {
 	
 	
 	
-	
-	
-	}
+}
 
 

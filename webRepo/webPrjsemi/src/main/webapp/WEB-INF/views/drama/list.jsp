@@ -19,8 +19,11 @@
     main table th , 
     main table td {
         border: 1px solid black;
-    }
+	}
+	.td3 a{
+		color : rgb(126, 181, 17);
 
+	}
 	.td4:hover {
 		cursor: pointer;
 	}	
@@ -31,7 +34,7 @@
 	#modal-wrap{
 	    width: 100vw;
 	    height: 100vh;
-	    background-color: rgba(211, 211, 211, 0.702);
+	    background-color: rgb(126, 181, 17);
 	    position: fixed;
 	    top: 0px;
 	    left: 0px;
@@ -113,24 +116,10 @@
 							<td class="td4">${ drama.title }</td>
 							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>
 							<c:if test="${!empty loginMember }">
-								<td><a href="javascript:toggleModal('${ drama.writerName }','${ drama.dramaWriter }')">${ drama.writerName }</a>
+								<td><a href="javascript:toggleModal('${ drama.writerName }','${ drama.dramaWriter }','${ drama.dramaNum }')">${ drama.writerName }</a>
 							    <div id="modal-wrap">
 									<div id="modal">
-										<button onclick="toggleModal();">창닫기</button>
-										<div class="modal-body">
-											<p><strong>닉네임:</strong>  <span class="writer-name"></span></p>
-											<p><strong>포인트:</strong> </p>
-											<form action="${root}/memo/write" method="post">
-												<input type="hidden" class="drama-writer" name="dramaWriter">
-												<input type="hidden" class="writer-name" name="writerName" >
-												<!--회원 메모가 존재하면 수정/삭제버튼 나오게/회원 메모가 없을 경우에만 등록버튼  필요-->
-												<p><strong>회원 메모:</strong> </p>
-												<input type="text" name="memoContent" value='${ vo.memoContent }'>
-												<input type="submit" value="등록">
-											</form>
-
-										</div>
-										<button>쪽지보내기</button>
+										<%@ include file="/WEB-INF/views/common/member-inform-modal.jsp" %>
 									</div>
 
 								</div>

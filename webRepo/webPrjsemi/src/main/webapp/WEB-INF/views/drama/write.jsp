@@ -105,7 +105,7 @@
 				for (var i = 0; i < x.length; i++) {
 				var option = document.createElement("option");  
 				option.value = x[i].headerNum;
-				option.text = x[i].headerName;
+				option.textContent = x[i].headerName;
 				sHeader.appendChild(option);
 				}
 			},
@@ -159,7 +159,6 @@
 				// option의 value 값과 내용을 설정하기
 				newOption.value = x.headerNum
 				newOption.textContent = x.headerName; 
-				//newOption.selected = true;
 			},
 			error: function() {
 				console.log();

@@ -15,8 +15,8 @@ public class MemoDao {
 		//SQL
 		String sql = "INSERT INTO MEMO (MEMO_NUM, MEMO_WRITER, MEMO_TARGET,MEMO_CONTENT) VALUES (SEQ_MEMO_NO.NEXTVAL, ?, ?,?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, vo.getMemoWriter());
-		pstmt.setString(2, vo.getMemoTarget());
+		pstmt.setInt(1, Integer.valueOf(vo.getMemoWriter()) );
+		pstmt.setInt(2,Integer.valueOf(vo.getMemoTarget()));
 		pstmt.setString(3, vo.getMemoContent());
 		int result = pstmt.executeUpdate();
 		
@@ -28,8 +28,8 @@ public class MemoDao {
 	public MemoVo selectMemoOneByno(Connection conn, String memoWriter, String dramaNum) throws Exception {
 		String sql = "SELECT MEMO_NUM, MEMO_WRITER, MEMO_TARGET,MEMO_CONTENT , TO_CHAR(MEMO_ENROLL_DATE , 'YYYY-MM-DD') AS ENROLL_DATE FROM MEMO WHERE MEMO_TARGET = ( SELECT DRAMA_WRITER FROM DRAMA_BOARD WHERE DRAMA_BRD_NUM = ? ) AND MEMO_WRITER = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, dramaNum);
-		pstmt.setString(2, memoWriter );
+		pstmt.setInt(1, Integer.valueOf(dramaNum));
+		pstmt.setInt(2, Integer.valueOf(memoWriter));
 		ResultSet rs = pstmt.executeQuery();
 
 		MemoVo vo = null;
