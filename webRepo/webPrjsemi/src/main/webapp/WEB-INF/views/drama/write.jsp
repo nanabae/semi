@@ -97,7 +97,7 @@
 	function loadHeader() {
 
 		$.ajax({
-			url: "${root}/header",
+			url: "${root}/drama/header/list",
 			type: "GET",
 			success: function(data) {
 				x = JSON.parse(data);
@@ -125,7 +125,6 @@
 
 		for (const element of optionArr) {
 			if (element.text === headInputVal) {
-				console.log(element.text);
 				isValid = false;
 				break;
 			}
@@ -151,13 +150,12 @@
 		sHeader.appendChild(newOption);
 
 		$.ajax({
-			url: "${root}/header",
+			url: "${root}/drama/header/register",
 			type: "post",
 			data: { headerName : headInputVal},
 			
 			success: function(data) {
 				x = JSON.parse(data);
-				console.log(x);
 				// option의 value 값과 내용을 설정하기
 				newOption.value = x.headerNum
 				newOption.textContent = x.headerName; 
@@ -182,7 +180,6 @@
 	//체크되어 있는 말머리만 삭제하기(기봅값인 말머리 선택시 알람 띄우기)
 	function checkedHeader() {
 		let selectedOption = sHeader.querySelector('select option:checked');
-		console.log(selectedOption);
 
 		if (selectedOption.value == '' ) {
 			alert("삭제할 말머리를 선택하세요");

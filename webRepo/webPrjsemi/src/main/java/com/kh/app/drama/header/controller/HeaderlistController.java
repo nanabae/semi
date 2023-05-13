@@ -15,30 +15,28 @@ import com.kh.app.drama.header.service.HeaderService;
 import com.kh.app.drama.header.vo.HeaderVo;
 import com.kh.app.member.vo.MemberVo;
 
-@WebServlet("/drama/header/register")
-public class HeaderRegisterController extends HttpServlet {
+@WebServlet("/drama/header/list")
+public class HeaderlistController extends HttpServlet{
 	private HeaderService hs = new HeaderService();
-	//말머리 등록	
+	
+	//말머리 불러오기
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
-		try{
-			MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
-			String memNum = loginMember.getMemNum();
-			String headerName = req.getParameter("headerName");
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberVo loginMember = (MemberVo)req.getSession().getAttribute("loginMember");
+		String memNum = loginMember.getMemNum();
 
-			HeaderVo vo = new HeaderVo();
-			vo.setMemNum(memNum);
-			vo.setHeaderName(headerName);
-			
-			HeaderVo dbVo = hs.regHeader(vo);
+		HeaderVo vo = new HeaderVo();
+		vo.setMemNum(memNum);
 
-			if(dbVo != null) {
+		
+		try {
+			List<HeaderVo> listVo = hs.selectListHeader(vo);
+
+			if(listVo != null) {
 				//자바객체를 JSON 형태의 문자열로 변환
 				Gson gson = new Gson();
-				String jsonStr = gson.toJson(dbVo);
-				
+				String jsonStr = gson.toJson(listVo);
+
 				//문자열 내보내기
 				resp.setCharacterEncoding("UTF-8");
 				PrintWriter out = resp.getWriter();
@@ -46,13 +44,11 @@ public class HeaderRegisterController extends HttpServlet {
 			}else {
 				throw new Exception();
 			}
-			
-		}catch(Exception e )	{
-			System.out.println("Header Register error");
+		} catch (Exception e) {
+			System.out.println("Header search list doServie error");
 			e.printStackTrace();
 		}
-		
-		
 	}
-
+	
 }
+	

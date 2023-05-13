@@ -33,7 +33,7 @@ public class HeaderDao {
 	
 	}
 	
-	//화면으로 보내 줄 값 조회(doPost)
+	//말머리 등록.화면으로 보내 줄 값 조회(doPost)
 	public HeaderVo selectHeader(Connection conn, HeaderVo vo) throws Exception, Exception {
 		String sql ="SELECT MH.MEM_HEAD_NUM, MH.MEM_NUM,H.HEADER_NUM,H.HEADER_NAME FROM HEADER H JOIN MEM_HEADER MH ON (H.HEADER_NUM = MH.HEADER_NUM) WHERE MEM_NUM = ? AND H.HEADER_NAME = ? ";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -62,7 +62,7 @@ public class HeaderDao {
 	}
 
 
-	//화면으로 보내 줄 값 조회(doGet)
+	//말머리 불러오기
 	public List<HeaderVo> selectListHeader(Connection conn, HeaderVo vo) throws Exception, Exception {
 		String sql ="SELECT MH.MEM_HEAD_NUM, MH.MEM_NUM,H.HEADER_NUM,H.HEADER_NAME FROM HEADER H JOIN MEM_HEADER MH ON (H.HEADER_NUM = MH.HEADER_NUM) WHERE MEM_NUM = ?  ";
 		PreparedStatement pstmt = conn.prepareStatement(sql);

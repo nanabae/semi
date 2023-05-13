@@ -18,8 +18,8 @@ public class HeaderService {
 		try(Connection conn = JDBCTemplate.getConnection();){
 		int result = dao.regHeader(conn,vo);
 		if(result == 2 || result == 1) {
-			JDBCTemplate.commit(conn);
 			dbVo = dao.selectHeader(conn, vo);
+			JDBCTemplate.commit(conn);
 			
 		}else{
 			JDBCTemplate.rollback(conn);
