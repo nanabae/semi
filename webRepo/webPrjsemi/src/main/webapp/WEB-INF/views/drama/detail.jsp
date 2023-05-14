@@ -6,95 +6,125 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-    #drama-area{
-        width: 800px;
-        height: 400px;
-        border: 2px solid black;
-        box-sizing: border-box;
-        margin: auto;
+#drama-area{
+    width: 800px;
+    height: 600px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    margin: auto;
 
-        display: grid;
-        grid-template-columns: 100px 100px 1fr 100px;
-        grid-template-rows: 50px 30px 30px 1fr;
-        align-items: center;
-    }
+    display: grid;
+    grid-template-columns: 100px 100px 1fr 100px;
+    grid-template-rows: 50px 30px 30px 1fr;
+    align-items: center;
+}
 
-    #drama-area > div {
-		border: 1px solid black;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-	}
-    #drama-area > div:nth-child(5) {
-		grid-column: span 3;
-	}
-    #drama-area > div:nth-child(7) {
-		grid-column: span 4;
-       
-	}
+#drama-area > div {
+    border: 1px solid black;    
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+#drama-area > div:nth-child(5) {
+    grid-column: span 3;
+}
+#drama-area > div:nth-child(7) {
+    grid-column: span 4;
+   
+}
 
-    #drama-area > div:nth-child(8) {
-		grid-column: span 4;
-       
-	}
-    #drama-area ul{
-        display: flex;
-        justify-content: left;
-        align-items: center;
-    }
-    .memo-area ,.btnWrite , .btnEdit {
-        display: none;
-    }
+#drama-area > div:nth-child(8) {
+    grid-column: span 4;
+   
+}
+#drama-area ul{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+.memo-area ,.btnWrite , .btnEdit ,.re-re-comment {
+    display: none;
+}
 
-    .active{display: block;}
+.active , .re-re-comment.active{display: block;}
 
-    .modal-wrap{
-	    width: 300px;
-	    height:100px;
-	    background-color: rgba(211, 211, 211, 0.702);
-	    position: fixed;
-	    top: 0px;
-	    left: 0px;
-	    display: none;
-	    justify-content: center;
-	    align-items: center;
-	}
-	
-	.modal-edit.active , .modal-delete.active{
-	    display: flex;
-        justify-content: center;
-	}
-	
-	.modal-body{
-		width: 70px;
-	    height: 30px;
-	    border: 1px solid black;
-	    box-sizing: border-box;
-        display: flex;
-		justify-content: center;
-		
-	}
+.modal-wrap{
+    width: 300px;
+    height:100px;
+    background-color: rgba(211, 211, 211, 0.702);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
 
-    #drama-btn-area{
-        width: 800px;
-        border: 2px solid black;
-        box-sizing: border-box;
-        margin: auto;
+.modal-edit.active , .modal-delete.active{
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body{
+    width: 70px;
+    height: 30px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
     
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-        grid-template-rows: 1fr;
-    }
+}
 
-    #drama-btn-area > div:nth-child(2){
-        justify-self: end;
-    }
+#drama-btn-area{
+    width: 800px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+#drama-btn-area > div:nth-child(2){
+    justify-self: end;
+}
+
+#reply-form-area {
+    width: 800px;
+    margin: auto;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#reply-form-area > input:first-child {
+    width: 680px;
+   
+}
+
+#reply-list-area > ul {
+    width: 800px;
+    margin: auto;
+}
+
+#reply-list-area  li {
+    border-bottom : 1px solid rgba(128, 128, 128, 0.466);
+}
+textarea{
+    width: 700px;
+}
+
+.red{
+    color: red;
+}
+
 
 
 </style>
+
 </head>
 <body>
-    <div id="wrap">
+    <div id="wrap" style="border-bottom:none;border-left:none; border-right:none;">
 
         <%@ include file="/WEB-INF/views/common/header.jsp" %>
       
@@ -102,7 +132,6 @@
 			<nav>
 			<%@ include file="/WEB-INF/views/common/nav.jsp" %>
 			</nav>
-
             <div id="drama-area">
                 <div>${ vo.catName }</div>
                 <div>${ vo.headerName }</div>
@@ -168,40 +197,32 @@
              
                 <div>${ vo.content }</div>
             </div>
-            <div id="drama-btn-area">
+            <div id="drama-btn-area">  
+                <div >
+                    <a class="btn btn-dark" href= "${root}/drama/list?page=${param.page}">목록</a>
+                </div>
+               
                 <c:if test="${ loginMember.memNum == vo.dramaWriter}">
-                    <div >
+                    <div>                       
                         <a class="btn btn-dark" href="${root}/drama/edit?dramaNum=${vo.dramaNum}">수정</a>
-                        <a  class="btn btn-dark" href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제</a>
+                        <a  class="btn btn-dark" href="${root}/drama/delete?dramaNum=${vo.dramaNum}">삭제</a> 
                     </div>
                 </c:if>
-
-                <div> <a class="btn btn-dark" href= "${root}/drama/list?page=${param.page}">목록</a></div>
             </div>
-            
 
+			<div id="reply-area">
+				<div id="reply-list-area">
+                    <ul>
 
-        <div id="reply-area">
-            <input type="hidden" name="dramaNum" value="${vo.dramaNum}">
-            <div id="reply-form-area">
-                <input type="text" name="content" placeholder="댓글을 입력하세요">
-                <input type="button" value="댓글쓰기" onclick="writeComment();">
-            </div>
-            <div id="reply-list-area">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>댓글내용</th>
-                            <th>작성자</th>
-                            <th>작성일시</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    </ul>
+				</div>
+				<div id="reply-form-area">
+                    <textarea name="comment" placeholder="댓글을 입력하세요" style="resize: none;"></textarea>
+					<input type="button" value="댓글쓰기" onclick="writeComment();">
+                  
 
-                    </tbody>
-                </table>
-            </div>
-    
+				</div>
+			</div>
         </main>
 
         <%@ include file="/WEB-INF/views/common/footer.jsp"%>
@@ -209,6 +230,7 @@
 
 </body>
 </html>
+
 <script>
 const memoText = document.querySelector(".memo-text");
 const memoAreaArr = document.querySelectorAll(".memo-area");
@@ -220,13 +242,39 @@ const btnEditArr= document.querySelectorAll(".btnEdit");
 // 읽어오는 속도때문에 문제
 if("${loginMember}" != null && "${loginMember}" !=""){
     loadMemo('${vo.dramaNum}');
-    setTimeout(showBtn,700)          
+    setTimeout(showBtn,1000)          
 }
 
 
+function showBtn(){
+    const innerMemoArr = document.querySelectorAll('.innerMemo');
+    innerMemoArr.forEach((element) => {
+    if(element.value.length > 1){
+        btnEditArr.forEach((btnEdArr) => {
+        btnEdArr.classList.add("active");
+        });
+        btnWriteArr.forEach((btnWrArr) => {
+        btnWrArr.classList.remove("active");
+        });
+
+     }else{
+        btnWriteArr.forEach((btnWrArr) => {
+        btnWrArr.classList.add("active");
+        });
+        btnEditArr.forEach((btnEdArr) => {
+        btnEdArr.classList.remove("active");
+        });
+    }
+
+    });
+}
+  
+
+
+//메모 읽어오기
 function loadMemo(dramaNum) {
     $.ajax({
-        url: "/app/memo/search",
+        url: "${root}/memo/search",
         type: "post",
         data: { dramaNum: dramaNum },
         success: function(data) {
@@ -251,31 +299,6 @@ function loadMemo(dramaNum) {
         },
     })
 }
-
-
-function showBtn(){
-    const innerMemoArr = document.querySelectorAll('.innerMemo');
-    innerMemoArr.forEach((element) => {
-    if(element.value.length > 1){
-        btnEditArr.forEach((btnEdArr) => {
-        btnEdArr.classList.add("active");
-        });
-        btnWriteArr.forEach((btnWrArr) => {
-        btnWrArr.classList.remove("active");
-        });
-
-        }else{
-            btnWriteArr.forEach((btnWrArr) => {
-            btnWrArr.classList.add("active");
-        });
-            btnEditArr.forEach((btnEdArr) => {
-            btnEdArr.classList.remove("active");
-        });
-        }
-
-    });
-}
-  
 
 function editModal(){
     //모달 가져오기
@@ -307,8 +330,6 @@ function validEditMemo() {
   return isValid;
 }
 
-
-
 function confirmDelMemo(){
     if (confirm("정말로 삭제하시겠습니까?")) {
         return true;
@@ -316,12 +337,124 @@ function confirmDelMemo(){
     } else {
         location.href = "${root}/drama/detail?dramaNum=${vo.dramaNum}";
         return false;
-}
+    }
 
 }
 
-</script>  
+//댓글 작성
+function writeComment(reRef){
+    const comment = document.querySelector("textarea[name=comment]").value;
+    $.ajax({
+        url : "${root}/drama/reply/write" ,
+        type : "POST" ,
+        data : {
+            dramaNum : '${vo.dramaNum}' ,
+            comment : comment ,
+            reRef : reRef,
+        } ,
+        success : (x)=>{
+            if(x == 'ok'){
+                 document.querySelector("textarea[name=comment]").value = '';
+                loadComment();
+            }else{
+                alert("댓글 작성 실패...");
+            }
+        } ,
+        error : (x)=>{
+            console.log(x);
+        } ,
+    });
+}
 
+//댓글 불러오기 
+function loadComment(){
+
+    $.ajax({
+        url : '${root}/drama/reply/list' ,
+        type : "GET" ,
+        data : {
+            dramaNum : '${vo.dramaNum}' , 
+        } ,
+        success : function(data){
+            //JSON 형태로 받아서, 화면에 보여주기
+            const x = JSON.parse(data);
+            const ul = document.querySelector('#reply-list-area ul');
+            ul.textContent = "";
+
+            for (let i = 0; i < x.length; i++) {
+                const li = document.createElement('li');
+                const input1 = document.createElement('input')
+                const div1 = document.createElement('div');
+                const div2 = document.createElement('div');
+                const btn = document.createElement('button');
+                input1.type = 'hidden';
+                input1.value = x[i].reRef;
+                li.appendChild(input1);
+                
+                if (x[i].reNo === x[i].reRef) {
+                    div1.textContent = x[i].writerName + ' ' + x[i].reEnrollEate;
+                    div2.textContent = x[i].reContent;
+                    btn.textContent = '대댓글';
+
+                    // 댓글 영역 생성
+                    const commentArea = document.createElement('div');
+                    commentArea.classList.add('re-re-comment');
+                    li.appendChild(commentArea);
+
+    
+                    btn.addEventListener('click', function(e) {
+                        const reRef = e.target.parentNode.querySelector('input[type="hidden"]').value;
+                                                    // 토글 로직 추가
+                        commentArea.classList.toggle('active');
+            
+                        const textarea = document.createElement('textarea');
+                        textarea.name = 'comment';
+                        textarea.placeholder = '댓글을 입력하세요';
+                        textarea.style.resize = 'none';
+
+                        const submitBtn = document.createElement('input');
+                        submitBtn.type = 'button';
+                        submitBtn.value = '댓글쓰기';
+                        
+                        commentArea.appendChild(textarea);
+                        commentArea.appendChild(submitBtn);
+                        submitBtn.addEventListener('click', function() {
+                            writeComment(reRef);
+                        });
+
+                        // 댓글 영역에 삽입
+                        li.appendChild(commentArea);
+                    });
+
+
+                }else{
+                    const tabIcon = document.createElement('i');
+                    tabIcon.classList.add('bi', 'bi-arrow-return-right' ,'red');
+                    div1.appendChild(tabIcon);
+                    div1.appendChild(document.createTextNode(x[i].writerName + ' ' + x[i].reEnrollEate));
+                    
+                    div2.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0'));
+                    div2.appendChild(document.createTextNode(x[i].reContent));
+                }
+                li.appendChild(div1);
+                li.appendChild(div2); 
+                if(x[i].reNo === x[i].reRef){
+                    li.appendChild(btn);                   
+
+                }
+                ul.appendChild(li);
+            }
+
+        } ,
+        error : function(e){
+            console.log(e);
+        } ,
+    });
+}
+
+loadComment();
+
+</script>
 
 
 

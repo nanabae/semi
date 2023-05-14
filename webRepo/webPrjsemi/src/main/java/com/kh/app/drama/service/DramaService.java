@@ -7,6 +7,7 @@ import java.util.List;
 import com.kh.app.common.db.JDBCTemplate;
 import com.kh.app.common.page.PageVo;
 import com.kh.app.drama.dao.DramaDao;
+import com.kh.app.drama.vo.DramaReplyVo;
 import com.kh.app.drama.vo.DramaVo;
 
 public class DramaService {
@@ -66,6 +67,32 @@ public class DramaService {
 			}
 		}
 		return result;
+	}
+
+	public int replyWrite(DramaReplyVo vo) throws Exception {
+		int result = 0;
+		try (Connection conn = JDBCTemplate.getConnection();){
+			
+			 result = dao.replyWrite(conn, vo);
+			
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+				
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}
+		return result;
+	}
+
+	public List<DramaReplyVo> selectReplyList(String dramaNum) throws Exception {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<DramaReplyVo> list = dao.selectReplyList(conn , dramaNum);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
 	}
 
 

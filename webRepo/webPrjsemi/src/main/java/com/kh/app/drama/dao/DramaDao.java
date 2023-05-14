@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.kh.app.common.db.JDBCTemplate;
 import com.kh.app.common.page.PageVo;
+import com.kh.app.drama.vo.DramaReplyVo;
 import com.kh.app.drama.vo.DramaVo;
 
 public class DramaDao {
@@ -211,6 +212,67 @@ public class DramaDao {
 		
 		return result;
 		
+	}
+	
+	public int replyWrite(Connection conn, DramaReplyVo vo) throws Exception {
+		String sql = null;
+		if(vo.getReRef().equals("")) {
+			sql = "INSERT INTO DRAMA_BOARD_REPLY(RE_NO ,RE_WRITER ,DRAMA_BRD_NUM ,RE_REF ,RE_CONTENT) VALUES(SEQ_DRAMA_BOARD_REPLY_NO.NEXTVAL, ? ,? ,SEQ_DRAMA_BOARD_REPLY_NO.CURRVAL ,?)";
+	
+		}else {
+			sql = "INSERT INTO DRAMA_BOARD_REPLY(RE_NO ,RE_WRITER ,DRAMA_BRD_NUM ,RE_REF ,RE_CONTENT) VALUES(SEQ_DRAMA_BOARD_REPLY_NO.NEXTVAL, ? ,? , " + vo.getReRef() + " ,?)";
+			
+		}
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getReWriter());
+		pstmt.setString(2, vo.getDramaBrdNum());
+		pstmt.setString(3, vo.getReContent());
+		
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
+
+	public List<DramaReplyVo> selectReplyList(Connection conn, String dramaNum) throws Exception {
+		
+		String sql = "SELECT D.* ,M.MEM_NICK FROM DRAMA_BOARD_REPLY D JOIN MEMBER M ON(D.RE_WRITER = M.MEM_NUM) WHERE D.DRAMA_BRD_NUM = ? ORDER BY D.RE_REF , D.RE_NO ";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, dramaNum);
+		ResultSet rs = pstmt.executeQuery();
+		
+		List<DramaReplyVo> voList = new ArrayList<>(); 
+		while( rs.next() ) {
+			String reNo = rs.getString("RE_NO");
+			String reWriter = rs.getString("RE_WRITER");
+			String reRef = rs.getString("RE_REF");
+			String reContent = rs.getString("RE_CONTENT");
+			String reAnonymity = rs.getString("RE_ANONYMITY");
+			String reEnrollEate = rs.getString("RE_ENROLL_DATE");
+			String reStatus = rs.getString("RE_STATUS");
+			String writerName = rs.getString("MEM_NICK");
+
+			
+			DramaReplyVo vo = new DramaReplyVo();
+			vo.setReNo(reNo);
+			vo.setReWriter(reWriter);
+			vo.setDramaBrdNum(dramaNum);
+			vo.setReRef(reRef);
+			vo.setReContent(reContent);
+			vo.setReAnonymity(reAnonymity);
+			vo.setReEnrollEate(reEnrollEate);
+			vo.setReStatus(reStatus);
+			vo.setWriterName(writerName);
+			
+			voList.add(vo);
+			
+		}
+		
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+
+		return voList;
 	}
 	
 	
