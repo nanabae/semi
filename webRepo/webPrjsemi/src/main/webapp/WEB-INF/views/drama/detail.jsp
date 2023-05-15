@@ -393,7 +393,7 @@ function loadComment(){
                 li.appendChild(input1);
                 
                 if (x[i].reNo === x[i].reRef) {
-                    div1.textContent = x[i].writerName + ' ' + x[i].reEnrollEate;
+                    div1.textContent = x[i].writerName + ' ' + x[i].reEnrolldate;
                     div2.textContent = x[i].reContent;
                     btn.textContent = '대댓글';
 
@@ -431,7 +431,8 @@ function loadComment(){
 
                 }else{
                     const tabIcon = document.createElement('i');
-                    tabIcon.classList.add('bi', 'bi-arrow-return-right' ,'red');
+                    tabIcon.classList.add('bi', 'bi-arrow-return-right' ,'red' , 'large-icon');
+                    
                     div1.appendChild(tabIcon);
                     div1.appendChild(document.createTextNode(x[i].writerName + ' ' + x[i].reEnrollEate));
                     

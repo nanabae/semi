@@ -1,7 +1,9 @@
 package com.kh.app.drama.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -17,6 +19,7 @@ import org.apache.tomcat.util.http.fileupload.FileUpload;
 import com.kh.app.drama.service.DramaService;
 import com.kh.app.drama.vo.DramaVo;
 import com.kh.app.member.vo.MemberVo;
+import com.kh.app.util.file.DramaFileVo;
 
 @MultipartConfig(
 		maxFileSize = 1024 * 1024 * 100 ,
@@ -47,14 +50,18 @@ public class DramaWriteController extends HttpServlet{
 		
 		try {
 			//파일 업로드
+			List<Part> fList = new ArrayList<>();
 			Collection<Part> parts = req.getParts();
 			for(Part part: parts) {
+				if(part.getName().equals("f")) {
+					fList.add(part);
+				}
 				System.out.println(part.getName());
 				
 			}
 			
-//			String path = req.getServletContext().getRealPath("/static/img/board/");
-//			FileUpload.saveFile(path , f);
+			String path = req.getServletContext().getRealPath("/static/img/board/");
+			List<DramaFileVo>  = FileUpload.saveFile(path , fList);
 			
 			//데꺼
 			String headerNum = "";
