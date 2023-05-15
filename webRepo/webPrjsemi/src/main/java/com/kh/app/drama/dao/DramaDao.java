@@ -214,20 +214,31 @@ public class DramaDao {
 		
 	}
 	
+
 	public int replyWrite(Connection conn, DramaReplyVo vo) throws Exception {
+		String reRefStr = vo.getReRef();
+		Integer reRef = null;
+		if (reRefStr != null && !reRefStr.trim().isEmpty()) {
+			reRef = Integer.valueOf(reRefStr);
+		}
+		
 		String sql = null;
 		if(vo.getReRef().equals("")) {
 			sql = "INSERT INTO DRAMA_BOARD_REPLY(RE_NO ,RE_WRITER ,DRAMA_BRD_NUM ,RE_REF ,RE_CONTENT) VALUES(SEQ_DRAMA_BOARD_REPLY_NO.NEXTVAL, ? ,? ,SEQ_DRAMA_BOARD_REPLY_NO.CURRVAL ,?)";
 	
 		}else {
-			sql = "INSERT INTO DRAMA_BOARD_REPLY(RE_NO ,RE_WRITER ,DRAMA_BRD_NUM ,RE_REF ,RE_CONTENT) VALUES(SEQ_DRAMA_BOARD_REPLY_NO.NEXTVAL, ? ,? , " + vo.getReRef() + " ,?)";
+			sql = "INSERT INTO DRAMA_BOARD_REPLY(RE_NO ,RE_WRITER ,DRAMA_BRD_NUM , RE_CONTENT , RE_REF) VALUES(SEQ_DRAMA_BOARD_REPLY_NO.NEXTVAL, ? ,? , ? , ? )";
 			
 		}
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getReWriter());
 		pstmt.setString(2, vo.getDramaBrdNum());
 		pstmt.setString(3, vo.getReContent());
-		
+		if(! vo.getReRef().equals("")) {
+			pstmt.setInt(4, reRef); 
+			
+		}
+	
 		int result = pstmt.executeUpdate();
 		
 		JDBCTemplate.close(pstmt);
@@ -237,7 +248,7 @@ public class DramaDao {
 
 	public List<DramaReplyVo> selectReplyList(Connection conn, String dramaNum) throws Exception {
 		
-		String sql = "SELECT D.* ,M.MEM_NICK FROM DRAMA_BOARD_REPLY D JOIN MEMBER M ON(D.RE_WRITER = M.MEM_NUM) WHERE D.DRAMA_BRD_NUM = ? ORDER BY D.RE_REF , D.RE_NO ";
+		String sql = "SELECT D.* ,M.MEM_NICK FROM DRAMA_BOARD_REPLY D JOIN MEMBER M ON(D.RE_WRITER = M.MEM_NUM) WHERE D.DRAMA_BRD_NUM = ? AND RE_STATUS = 'O' ORDER BY D.RE_REF , D.RE_NO ";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, dramaNum);
 		ResultSet rs = pstmt.executeQuery();

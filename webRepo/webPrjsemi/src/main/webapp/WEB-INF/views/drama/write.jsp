@@ -78,6 +78,11 @@
 
 					
 					<textarea name="content" placeholder="내용을 입력하세요"></textarea>
+					
+					<div>
+						<span>첨부파일</span>
+						<input type="file" multiple name ="f">
+					</div>
 					<input class="btn btn-dark" type="submit" value="작성하기"> </input>
 				</div>
 			</form>

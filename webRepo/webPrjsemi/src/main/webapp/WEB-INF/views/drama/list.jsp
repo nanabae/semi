@@ -180,8 +180,6 @@
 		});
     }
 
-	
-
 	const searchType = '${searchVo.searchType}';
 	const searchValue = '${searchVo.searchValue}';
 	

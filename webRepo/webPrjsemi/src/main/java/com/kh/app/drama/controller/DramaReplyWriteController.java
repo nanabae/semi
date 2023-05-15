@@ -33,7 +33,7 @@ public class DramaReplyWriteController extends HttpServlet{
 			String reRef_ = req.getParameter("reRef");
 			
 			if(reRef_ != null) reRef = reRef_ ;
-		
+
 			//데뭉
 			DramaReplyVo vo = new DramaReplyVo();
 			vo.setDramaBrdNum(dramaBrdNum);

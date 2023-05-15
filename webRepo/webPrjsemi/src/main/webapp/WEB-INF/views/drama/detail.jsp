@@ -354,6 +354,7 @@ function writeComment(reRef){
         } ,
         success : (x)=>{
             if(x == 'ok'){
+                console.log(x);
                  document.querySelector("textarea[name=comment]").value = '';
                 loadComment();
             }else{
@@ -399,33 +400,34 @@ function loadComment(){
                     // 댓글 영역 생성
                     const commentArea = document.createElement('div');
                     commentArea.classList.add('re-re-comment');
-                    li.appendChild(commentArea);
+                    //li.appendChild(commentArea);
 
-    
                     btn.addEventListener('click', function(e) {
                         const reRef = e.target.parentNode.querySelector('input[type="hidden"]').value;
-                                                    // 토글 로직 추가
-                        commentArea.classList.toggle('active');
-            
+                        //버튼 클릭시 무한 증식 해결
+                        commentArea.textContent = "";
                         const textarea = document.createElement('textarea');
                         textarea.name = 'comment';
-                        textarea.placeholder = '댓글을 입력하세요';
+                        textarea.placeholder = '대댓글을 입력하세요';
                         textarea.style.resize = 'none';
 
                         const submitBtn = document.createElement('input');
                         submitBtn.type = 'button';
-                        submitBtn.value = '댓글쓰기';
+                        submitBtn.value = '대댓글쓰기';
                         
                         commentArea.appendChild(textarea);
                         commentArea.appendChild(submitBtn);
-                        submitBtn.addEventListener('click', function() {
-                            writeComment(reRef);
-                        });
 
                         // 댓글 영역에 삽입
                         li.appendChild(commentArea);
-                    });
+                        commentArea.classList.toggle('active');
+                        submitBtn.addEventListener('click', function() {
+                            console.log(reRef);
+                            writeComment(reRef);
 
+                         });
+
+                    });
 
                 }else{
                     const tabIcon = document.createElement('i');

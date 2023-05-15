@@ -1,19 +1,27 @@
 package com.kh.app.drama.controller;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 
 import com.kh.app.drama.service.DramaService;
 import com.kh.app.drama.vo.DramaVo;
 import com.kh.app.member.vo.MemberVo;
 
-
+@MultipartConfig(
+		maxFileSize = 1024 * 1024 * 100 ,
+		maxRequestSize = 1024 * 1024 * 1000
+		)
 @WebServlet("/drama/write")
 public class DramaWriteController extends HttpServlet{
 	
@@ -38,6 +46,15 @@ public class DramaWriteController extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		try {
+			//파일 업로드
+			Collection<Part> parts = req.getParts();
+			for(Part part: parts) {
+				System.out.println(part.getName());
+				
+			}
+			
+//			String path = req.getServletContext().getRealPath("/static/img/board/");
+//			FileUpload.saveFile(path , f);
 			
 			//데꺼
 			String headerNum = "";
@@ -51,7 +68,6 @@ public class DramaWriteController extends HttpServlet{
 			if(headerNum_!= null || headerNum_ != "" ) {
 				headerNum =headerNum_;
 			}
-			System.out.println(headerNum);
 			//데뭉
 			DramaVo vo = new DramaVo();
 			vo.setDramaWriter(memNum);
