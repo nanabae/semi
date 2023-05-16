@@ -380,7 +380,9 @@ function loadComment(){
             //JSON 형태로 받아서, 화면에 보여주기
             const x = JSON.parse(data);
             const ul = document.querySelector('#reply-list-area ul');
-            ul.textContent = "";
+            // ul.textContent = "";
+                ul.innerHTML = "";
+            
 
             for (let i = 0; i < x.length; i++) {
                 const li = document.createElement('li');
@@ -392,6 +394,7 @@ function loadComment(){
                 input1.value = x[i].reRef;
                 li.appendChild(input1);
                 
+                //댓글일 경우
                 if (x[i].reNo === x[i].reRef) {
                     div1.textContent = x[i].writerName + ' ' + x[i].reEnrolldate;
                     div2.textContent = x[i].reContent;
@@ -405,7 +408,7 @@ function loadComment(){
                     btn.addEventListener('click', function(e) {
                         const reRef = e.target.parentNode.querySelector('input[type="hidden"]').value;
                         //버튼 클릭시 무한 증식 해결
-                        commentArea.textContent = "";
+                        commentArea.innerHTML = "";
                         const textarea = document.createElement('textarea');
                         textarea.name = 'comment';
                         textarea.placeholder = '대댓글을 입력하세요';
@@ -429,6 +432,7 @@ function loadComment(){
 
                     });
 
+                //대댓글일 경우
                 }else{
                     const tabIcon = document.createElement('i');
                     tabIcon.classList.add('bi', 'bi-arrow-return-right' ,'red' , 'large-icon');

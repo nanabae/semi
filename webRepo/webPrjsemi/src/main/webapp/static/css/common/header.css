@@ -31,6 +31,8 @@ nav a{
     text-decoration: none;
 }
 
+textarea {resize: none;}
+
 /*main {
 
     width: 90%;

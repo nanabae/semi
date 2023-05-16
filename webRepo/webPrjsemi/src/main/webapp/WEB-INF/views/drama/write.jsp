@@ -7,40 +7,26 @@
 <title>드라마 게시글 작성</title>
 <style>
 
-	#form-area{
+	#write-area{
+		width: 800px;
 		font-size: 22px;
-		margin-top: 30px;
+		margin: auto;
+		row-gap: 20px; 
 		display: grid;
-		row-gap: 20px;
+		grid-template-rows: 30px 30px 640px 100px 30px;
 	}
 
-	#form-area > input {
-		width: 100%;
-		height: 40px;
-		border: 1px solid black;
+	#write-area > textarea {resize: none;}
+
+	.btn-area {
+		width: 800px;
+		margin: auto;
+		display: grid;
+		grid-template-columns: 600px 100px;
+		justify-content: space-between;
 	}
 
-	#form-area > textarea {
-		width: 100%;
-		height: 350px;
-		border: 1px solid black;
-		resize: none;
-	}
-
-	#form-area > label {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		margin-left: 20px;
-
-	}
-
-	#form-area>select , .title-input{
-		width: 100%;
-		display: flex;
-		align-items: center;
-		margin-left: 20px;
-	}
+	#write-area input [name= 'f'] {display: none;}
 
 </style>
 </head>
@@ -55,9 +41,9 @@
 			<h1 align="center">드라마방 게시글 작성</h1>
 
 			<form action="${root}/drama/write" method="POST">
-				<div id="form-area">
-					<label>
-						<div>말머리:</div>
+				<div id="write-area">
+					<div>
+						말머리:
 						<select name="header" class="select-header">
 							<option value="" class="header-default">말머리</option>
 
@@ -65,28 +51,33 @@
 						<input type="text" class="header-input">
 						<button type="button" onclick="checkHeader();">말머리 추가</button>
 						<button type="button" onclick="checkedHeader();">말머리 삭제</button>
-					</label>
+					</div>
 					<div>
-						<select name="catNum">
+						<select name="catNum" class="select-cat">
 							<option value="1">잡담</option>
 							<option value="2">리뷰</option>
 							<option value="3">정보</option>
 						</select>
-						<input type="text" width="800px" name="title" placeholder="제목을 입력하세요">
+						<input type="text" name="title" placeholder="제목을 입력하세요">
 
 					</div>
-
-					
 					<textarea name="content" placeholder="내용을 입력하세요"></textarea>
-					
 					<div>
-						<span>첨부파일</span>
-						<input type="file" multiple name ="f">
+						<label>
+							첨부파일
+							<input type="file" multiple name="f">
+						</label>
+						<div id="preview-area">
+						
+						</div>
 					</div>
+				</div>
+				<div class="btn-area">
 					<input class="btn btn-dark" type="submit" value="작성하기"> </input>
+					<a class="btn btn-dark" href='${root}/drama/list?page=${param.page}'>돌아가기</a>
+
 				</div>
 			</form>
-			<div> <a class="btn btn-dark" href='${root}/drama/list?page=${param.page}'>돌아가기</a></div>
 		
 		</main>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
@@ -138,7 +129,7 @@
 		if (isValid) {
 			regHeader();
 		}else{
-			alert("이미 등록된 말머리 존재가 존재합니다.");
+			alert("이미 등록된 말머리가 존재합니다.");
 		}
 	
 	}
