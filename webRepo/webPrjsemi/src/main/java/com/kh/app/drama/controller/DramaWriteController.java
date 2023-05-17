@@ -49,19 +49,6 @@ public class DramaWriteController extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		try {
-			//파일 업로드
-			List<Part> fList = new ArrayList<>();
-			Collection<Part> parts = req.getParts();
-			for(Part part: parts) {
-				if(part.getName().equals("f")) {
-					fList.add(part);
-				}
-				System.out.println(part.getName());
-				
-			}
-			
-			String path = req.getServletContext().getRealPath("/static/img/board/");
-			List<DramaFileVo>  = FileUpload.saveFile(path , fList);
 			
 			//데꺼
 			String headerNum = "";

@@ -26,7 +26,7 @@
 		justify-content: space-between;
 	}
 
-	#write-area input [name= 'f'] {display: none;}
+
 
 </style>
 </head>
@@ -62,15 +62,6 @@
 
 					</div>
 					<textarea name="content" placeholder="내용을 입력하세요"></textarea>
-					<div>
-						<label>
-							첨부파일
-							<input type="file" multiple name="f">
-						</label>
-						<div id="preview-area">
-						
-						</div>
-					</div>
 				</div>
 				<div class="btn-area">
 					<input class="btn btn-dark" type="submit" value="작성하기"> </input>

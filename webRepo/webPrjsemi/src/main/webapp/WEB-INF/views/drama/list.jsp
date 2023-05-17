@@ -112,20 +112,8 @@
 							<td>${ drama.catName }</td>
 							<c:if test="${empty drama.headerName }"><td> </td></c:if>
 							<c:if test="${!empty drama.headerName }"><td class="td3"><a href="${root}/drama/list?page=1&catNum=${drama.catNum}&headerNum=${drama.headerNum}" >${ drama.headerName }</a></td></c:if>
-							
 							<td class="td4">${ drama.title }</td>
-							<c:if test="${empty loginMember }"><td>${ drama.writerName }</td></c:if>
-							<c:if test="${!empty loginMember }">
-								<td><a href="javascript:toggleModal('${ drama.writerName }','${ drama.dramaWriter }','${ drama.dramaNum }')">${ drama.writerName }</a>
-							    <div id="modal-wrap">
-									<div id="modal">
-										<%@ include file="/WEB-INF/views/common/member-inform-modal.jsp" %>
-									</div>
-
-								</div>
-								</td>
-							</c:if>
-							
+							<td>${ drama.writerName }</td>			
 							<td>${ drama.enrollDate }</td>
 							<td>${ drama.hit }</td>
 						</tr>
