@@ -50,6 +50,7 @@ public class DramaListController extends HttpServlet {
 			List<DramaVo> list = null;
 			list = ds.selectDramaList(pv,catNum,searchType,searchValue,headerNum);
 
+
 			Map<String, String> map = new HashMap<>();
 			map.put("searchType", searchType);
 			map.put("searchValue", searchValue);
